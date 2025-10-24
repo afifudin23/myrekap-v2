@@ -10,6 +10,26 @@ import { Loading } from "@/components/atoms";
 import { orderSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+export function toFormData<T extends Record<string, unknown>>(data: T): FormData {
+    const formData = new FormData();
+
+    (Object.entries(data) as [keyof T, T[keyof T]][]).forEach(([key, value]) => {
+        if (key === "paymentProof" && Array.isArray(value)) {
+            (value as File[]).forEach((file) => {
+                formData.append(key as string, file);
+            });
+        } else if (value instanceof Date) {
+            formData.append(key as string, value.toISOString());
+        } else if (typeof value === "object" && value !== null && !(value instanceof File)) {
+            formData.append(key as string, JSON.stringify(value));
+        } else if (value !== undefined && value !== null) {
+            formData.append(key as string, String(value));
+        }
+    });
+
+    return formData;
+}
+
 function OrderCreatePage() {
     const fieldRefs = useRef<Record<string, HTMLDivElement | null>>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -34,28 +54,14 @@ function OrderCreatePage() {
             deliveryAddress: "",
             shippingCost: 0,
             paymentMethod: undefined,
-            paymentProof: [],
+            paymentProof: null,
         },
     });
 
     const onSubmit = async (data: orderSchema.CreateType) => {
-        console.log(data);
         setIsLoading(true);
         try {
-            const formData = new FormData();
-            for (const key in data) {
-                const value = data[key as keyof orderSchema.CreateType];
-
-                if (key === "paymentProof" && Array.isArray(value)) {
-                    value.map((file) => {
-                        if (file instanceof File) formData.append(key, file);
-                    });
-                } else if (typeof value === "object" && !(value instanceof File)) {
-                    formData.append(key, JSON.stringify(value));
-                } else if (value !== undefined) {
-                    formData.append(key, String(value));
-                }
-            }
+            const formData = toFormData(data);
 
             await axiosInstance.post("orders/myrekap", formData);
 
@@ -64,16 +70,10 @@ function OrderCreatePage() {
             console.log(error.response.data);
             if (error.response.status === 500) {
                 navigate("/orders", {
-                    state: {
-                        message: "Oops! Server mengalami kendala teknis. Tim kami akan segera menanganinya",
-                    },
+                    state: { message: "Oops! Server mengalami kendala teknis. Tim kami akan segera menanganinya" },
                 });
             } else {
-                navigate("/orders", {
-                    state: {
-                        message: error.response.data.message,
-                    },
-                });
+                navigate("/orders", { state: { message: error.response.data.message } });
             }
         } finally {
             setIsLoading(false);

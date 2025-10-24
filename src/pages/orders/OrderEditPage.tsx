@@ -2,6 +2,7 @@ import { Loading } from "@/components/atoms";
 import { TitlePage } from "@/components/molecules";
 import { OrderForm } from "@/components/organisms/orders";
 import MainLayout from "@/components/templates/MainLayout";
+import { toFormData } from "@/pages/orders/OrderCreatePage";
 import { orderSchema } from "@/schemas";
 import { axiosInstance, formatters } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,46 +28,24 @@ function OrderEditPage() {
         formState: { errors },
     } = useForm<orderSchema.UpdateType>({
         resolver: zodResolver(orderSchema.update),
-        // defaultValues: order,
+        defaultValues: order,
     });
-    
+
     const onSubmit = async (data: any) => {
         setIsLoading(true);
         try {
-            const formData = new FormData();
-            for (const key in data) {
-                const value = data[key];
-
-                if (key === "paymentProof" && Array.isArray(value)) {
-                    value.map((file) => {
-                        formData.append(key, file);
-                    });
-                } else if (typeof value === "object" && !(value instanceof File)) {
-                    formData.append(key, JSON.stringify(value));
-                } else {
-                    formData.append(key, value);
-                }
-            }
+            const formData = toFormData(data);
             await axiosInstance.patch(`orders/myrekap/${id}`, formData);
 
-            navigate("/orders", {
-                state: {
-                    message: `Pesanan berhasil diupdate`,
-                },
-            });
+            navigate("/orders", { state: { message: `Pesanan berhasil diupdate` } });
         } catch (error: any) {
+            console.log(error.response.data);
             if (error.response.status === 500) {
                 navigate("/orders", {
-                    state: {
-                        message: "Oops! Server mengalami kendala teknis. Tim kami akan segera menanganinya",
-                    },
+                    state: { message: "Oops! Server mengalami kendala teknis. Tim kami akan segera menanganinya" },
                 });
             } else {
-                navigate("/orders", {
-                    state: {
-                        message: error.response.data.message,
-                    },
-                });
+                navigate("/orders", { state: { message: error.response.data.message } });
             }
         } finally {
             setIsLoading(false);

@@ -1,4 +1,9 @@
-import { CUSTOMER_CATEGORY_LABELS, ORDER_STATUS_LABELS, PAYMENT_METHOD_LABELS, PAYMENT_STATUS_LABELS } from "@/constants/category";
+import {
+    CUSTOMER_CATEGORY_LABELS,
+    ORDER_STATUS_LABELS,
+    PAYMENT_METHOD_LABELS,
+    PAYMENT_STATUS_LABELS,
+} from "@/constants/category";
 
 const formatters = {
     // parse = frontend -> backend
@@ -39,7 +44,7 @@ const formatters = {
 
         return `${day}-${month}-${year} ${hours}:${minutes}`;
     },
-    
+
     dateToString: (isoDate: any) => {
         const date = new Date(isoDate);
         const options: Intl.DateTimeFormatOptions = {
@@ -84,29 +89,25 @@ const formatters = {
     },
 
     parseInputOrder(data: any) {
+        const paymentProof = data.images.find((img: any) => img.type === "PAYMENT_PROOF");
         return {
             customerName: data.customerName,
             customerCategory: data.customerCategory,
             phoneNumber: data.phoneNumber,
             items: data.items.map((item: any) => ({
-                id: item.id,
                 productId: item.productId,
                 quantity: item.quantity,
                 message: item.message || "",
                 price: item.unitPrice,
             })),
+            isPaid: data.paymentStatus === "PAID",
             deliveryOption: data.deliveryOption,
             deliveryAddress: data.deliveryAddress || "",
             readyDate: new Date(data.readyDate),
             paymentMethod: data.paymentMethod,
+            paymentProof: !paymentProof ? null : Array.isArray(paymentProof) ? paymentProof : [paymentProof],
             totalPrice: data.totalPrice,
             shippingCost: data.shippingCost,
-            paymentProof:
-                data.images === null
-                    ? []
-                    : Array.isArray(data.paymentProof)
-                    ? data.paymentProof
-                    : [data.paymentProof],
         };
     },
 
@@ -138,7 +139,7 @@ const formatters = {
             customerName: this.formatCustomerNameReceipt(data.customerName),
             customerCategory: CUSTOMER_CATEGORY_LABELS[data.customerCategory].toUpperCase(),
             phoneNumber: data.phoneNumber,
-            paymentMethod: data.paymentMethod ? PAYMENT_METHOD_LABELS[data.paymentMethod].toUpperCase()  : "-",
+            paymentMethod: data.paymentMethod ? PAYMENT_METHOD_LABELS[data.paymentMethod].toUpperCase() : "-",
             totalPrice: data.totalPrice,
             paymentProvider: data.paymentProvider ? data.paymentProvider.split("_").join(" ") : "-",
             paymentStatus: PAYMENT_STATUS_LABELS[data.paymentStatus].toUpperCase(),
