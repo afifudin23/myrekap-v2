@@ -1,4 +1,6 @@
 import {
+    CUSTOMER_CATEGORY_ITEMS,
+    CUSTOMER_CATEGORY_LABELS,
     DELIVERY_OPTION_ITEMS,
     DELIVERY_OPTION_LABELS,
     PAYMENT_METHOD_ITEMS,
@@ -11,13 +13,13 @@ export const ORDER_FORM_ITEMS = [
         type: "text",
         name: "customerName",
     },
-    // {
-    //     label: "Kategori Pelanggan",
-    //     type: "dropdown",
-    //     name: "customerCategory",
-    //     options: CUSTOMER_CATEGORY_ITEMS.filter((item) => item.label !== "Semua"),
-    //     optionLabel: CUSTOMER_CATEGORY_LABELS,
-    // },
+    {
+        label: "Kategori Pelanggan",
+        type: "dropdown",
+        name: "customerCategory",
+        options: CUSTOMER_CATEGORY_ITEMS.filter((item) => item !== "ALL"),
+        optionLabel: CUSTOMER_CATEGORY_LABELS,
+    },
     {
         label: "Nomor Telepon",
         type: "text",
@@ -27,6 +29,11 @@ export const ORDER_FORM_ITEMS = [
         label: "Produk Item",
         type: "product",
         name: "items",
+    },
+    {
+        label: "Tanggal Produk Jadi",
+        type: "date",
+        name: "readyDate",
     },
     {
         label: "Opsi Pengiriman",
@@ -41,9 +48,15 @@ export const ORDER_FORM_ITEMS = [
         name: "deliveryAddress",
     },
     {
-        label: "Tanggal Produk Jadi",
-        type: "date",
-        name: "readyDate",
+        label: "Biaya Pengiriman",
+        type: "money",
+        name: "shippingCost",
+    },
+    {
+        label: "Status Pembayaran",
+        type: "boolean",
+        name: "isPaid",
+        optionLabel: { true: "Sudah Bayar", false: "Belum Bayar" },
     },
     {
         label: "Metode Pembayaran",

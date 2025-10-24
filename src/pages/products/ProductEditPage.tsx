@@ -1,7 +1,9 @@
 import { TitlePage } from "@/components/molecules";
 import { PRODUCT_FORM_ITEMS, ProductForm } from "@/components/organisms/products";
 import MainLayout from "@/components/templates/MainLayout";
+import { productSchema } from "@/schemas";
 import { axiosInstance } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TbLogout2 } from "react-icons/tb";
@@ -21,7 +23,8 @@ function ProductEditPage() {
         setValue, // Add setValue for push to publicIdsToDelete
         getValues,
         formState: { errors },
-    } = useForm({
+    } = useForm<productSchema.UpdateType>({
+        resolver: zodResolver(productSchema.update),
         defaultValues: {
             name: "",
             price: 0,
@@ -41,32 +44,30 @@ function ProductEditPage() {
         }
     }, [id]);
 
-    const onSubmit = handleSubmit(async (data: any) => {
-        console.log(data)
+    const onSubmit = handleSubmit(async (data: productSchema.UpdateType) => {
+        console.log(data);
         setIsLoading(true);
         try {
             const formData = new FormData();
 
             for (const key in data) {
-                const value = data[key];
+                const value = data[key as keyof productSchema.UpdateType];
 
                 // Handle multiple file upload
                 if (key === "images" && Array.isArray(value)) {
                     value.forEach((item: any) => {
-                        if (item instanceof File) {
-                            formData.append("images", item);
-                        }
+                        if (item instanceof File) formData.append("images", item);
                     });
                 } else if (key === "publicIdsToDelete" && Array.isArray(value)) {
-                    value.forEach((publicId: string) => {
-                        formData.append(key, publicId);
+                    value.forEach((publicId) => {
+                        if (typeof publicId === "string") formData.append(key, publicId.toString());
                     });
                 } else {
-                    formData.append(key, value);
+                    formData.append(key, value.toString());
                 }
             }
 
-            await axiosInstance.put(`products/${id}`, formData);
+            await axiosInstance.patch(`products/${id}`, formData);
             navigate("/products", {
                 state: {
                     message: "Perubahan pada produk telah berhasil disimpan",

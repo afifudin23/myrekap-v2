@@ -39,15 +39,15 @@ const InputDropdown = React.forwardRef<HTMLDivElement, InputDropdownProps>(
                     control={control}
                     render={({ field: { onChange, value } }) => {
                         // Handle the case when value from paymentMethod is "Pending" to set it to null
-                        // if (value === "Pending") {
-                        //     onChange(null);
-                        // }
-                        // useEffect(() => {
-                        //     if (disabled) {
-                        //         setIsOpen(false);
-                        //         onChange(null);
-                        //     }
-                        // }, [disabled]);
+                        if (value === "Pending") {
+                            onChange(null);
+                        }
+                        useEffect(() => {
+                            if (disabled) {
+                                setIsOpen(false);
+                                onChange(null);
+                            }
+                        }, [disabled]);
                         return (
                             <div className="relative inline-block w-full" ref={dropdownRef}>
                                 <div

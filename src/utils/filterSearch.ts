@@ -19,7 +19,7 @@ export const filterSearch = (
 };
 
 export const filterCustomerCategory = ({ customerCategory }: { customerCategory: string }, customer: string) =>
-    customer === "Customer" || customerCategory === formatters.parseCapital(customer);
+    customer === "Pelanggan" || customerCategory === formatters.parseCapital(customer);
 
 export const filterFlowerCategory = ({ flowerCategory }: { flowerCategory: string }, flower: string) =>
     flower === "Bunga" || flowerCategory === formatters.parseCapital(flower);

@@ -99,14 +99,14 @@ const formatters = {
             deliveryAddress: data.deliveryAddress || "",
             readyDate: new Date(data.readyDate),
             paymentMethod: data.paymentMethod,
+            totalPrice: data.totalPrice,
+            shippingCost: data.shippingCost,
             paymentProof:
-                data.paymentProof === null
+                data.images === null
                     ? []
                     : Array.isArray(data.paymentProof)
                     ? data.paymentProof
                     : [data.paymentProof],
-            totalPrice: data.totalPrice,
-            shippingCost: data.shippingCost,
         };
     },
 

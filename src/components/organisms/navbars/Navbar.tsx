@@ -7,7 +7,7 @@ const Navbar = memo(function () {
     return (
         <nav className="p-3 px-10 w-full flex justify-between bg-white items-center">
             <NavbarLogo />
-            <NavbarUserMenu username={user.username} role={user.role} />
+            <NavbarUserMenu fullName={user.fullName} role={user.role} />
         </nav>
     );
 });

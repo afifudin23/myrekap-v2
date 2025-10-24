@@ -1,6 +1,14 @@
 import { useEffect } from "react";
 import { ORDER_FORM_ITEMS } from ".";
-import { InputDate, InputDropdown, InputFile, InputMoney, InputProduct, InputText } from "@/components/molecules";
+import {
+    InputBoolean,
+    InputDate,
+    InputDropdown,
+    InputFile,
+    InputMoney,
+    InputProduct,
+    InputText,
+} from "@/components/molecules";
 import { Button } from "@/components/atoms";
 import { COLORS } from "@/constants/colors";
 import { formatters } from "@/utils";
@@ -29,6 +37,7 @@ function OrderForm({ onSubmit, fieldRefs, control, watch, errors, getValues, set
     const items = watch("items");
     const totalPrice = items.reduce((total: number, item: any) => total + item.price * item.quantity, 0);
     const shippingCost = deliveryOption === "DELIVERY" ? totalPrice * 0.1 : 0;
+    const isPaid = watch("isPaid");
 
     useEffect(() => {
         if (!errors || Object.keys(errors).length === 0) return;
@@ -69,7 +78,6 @@ function OrderForm({ onSubmit, fieldRefs, control, watch, errors, getValues, set
                                 setValue={setValue}
                             />
                         );
-
                     case "money":
                         return (
                             <InputMoney
@@ -79,6 +87,7 @@ function OrderForm({ onSubmit, fieldRefs, control, watch, errors, getValues, set
                                 control={control}
                                 ref={(el) => (fieldRefs.current[item.name] = el)}
                                 error={getErrorMessage(item.name, errors)}
+                                disabled={item.name === "shippingCost" && deliveryOption !== "DELIVERY"}
                             />
                         );
                     case "dropdown":
@@ -92,6 +101,7 @@ function OrderForm({ onSubmit, fieldRefs, control, watch, errors, getValues, set
                                 control={control}
                                 ref={(el) => (fieldRefs.current[item.name] = el)}
                                 error={getErrorMessage(item.name, errors)}
+                                disabled={!isPaid && item.name === "paymentMethod"}
                             />
                         );
                     case "date":
@@ -105,7 +115,18 @@ function OrderForm({ onSubmit, fieldRefs, control, watch, errors, getValues, set
                                 error={getErrorMessage(item.name, errors)}
                             />
                         );
-
+                    case "boolean":
+                        return (
+                            <InputBoolean
+                                key={item.name}
+                                label={item.label}
+                                name={item.name}
+                                control={control}
+                                optionLabel={item.optionLabel}
+                                ref={(el) => (fieldRefs.current[item.name] = el)}
+                                error={getErrorMessage(item.name, errors)}
+                            />
+                        );
                     case "file":
                         return (
                             <InputFile

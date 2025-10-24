@@ -19,7 +19,7 @@ function useOrders() {
         };
         const getAllOrders = async () => {
             try {
-                const response = await axiosInstance.get("/orders/admin", { params });
+                const response = await axiosInstance.get("/orders/myrekap", { params });
                 setOrders(response.data.data);
             } catch (error: any) {
                 if (error.response.status === 500) {

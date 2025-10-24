@@ -7,4 +7,5 @@ export { default as InputMoney } from "./InputMoney";
 export { default as InputMonthYear } from "./InputMonthYear";
 export { default as InputText } from "./InputText";
 export { default as InputProduct } from "./InputProduct";
+export { default as InputBoolean } from "./InputBoolean";
 export * from "./input.types";

@@ -23,7 +23,7 @@ function DashboardPage() {
                 month: month.toString().padStart(2, "0"),
                 year: year.toString(),
             };
-            const ordersFilter = await axiosInstance.get("/orders/admin", { params });
+            const ordersFilter = await axiosInstance.get("/orders/myrekap", { params });
             setSearchParams(params);
             setOrders(ordersFilter.data.data);
         };

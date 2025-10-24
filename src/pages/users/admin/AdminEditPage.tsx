@@ -6,6 +6,8 @@ import { axiosInstance } from "@/utils";
 import { UserForm } from "@/components/organisms/users";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { userSchema } from "@/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 function AdminEditPage() {
     const navigate = useNavigate();
@@ -16,12 +18,13 @@ function AdminEditPage() {
         control,
         handleSubmit,
         formState: { errors },
-    } = useForm<any>({
+    } = useForm<userSchema.UpdateType>({
+        resolver: zodResolver(userSchema.update),
         defaultValues: {
-            fullName: user?.fullName,
-            username: user?.username,
-            phoneNumber: user?.phoneNumber,
-            email: user?.email,
+            fullName: user.fullName,
+            username: user.username,
+            phoneNumber: user.phoneNumber,
+            email: user.email,
             password: "",
             confPassword: "",
         },
@@ -40,10 +43,10 @@ function AdminEditPage() {
         }
     }, [errors]);
 
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: userSchema.UpdateType) => {
         setIsLoading(true);
         try {
-            await axiosInstance.put(`users/${user.id}`, data);
+            await axiosInstance.patch(`users/admins/${user.id}`, data);
             localStorage.removeItem("userSelected");
             navigate("/users/admin", {
                 state: { message: "Perubahan pada user berhasil disimpan" },

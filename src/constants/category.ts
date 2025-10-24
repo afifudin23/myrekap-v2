@@ -1,29 +1,18 @@
 // Customer Category
-export const CUSTOMER_CATEGORY_ITEMS = [
-    "ALL",
-    "UMUM",
-    "PEMDA",
-    "AKADEMIK",
-    "RUMAH_SAKIT",
-    "POLISI_MILITER",
-    "PERBANKAN",
-];
+export const CUSTOMER_CATEGORY_ITEMS = ["ALL", "UMUM", "PEMDA", "PERBANKAN"];
 export const CUSTOMER_CATEGORY_LABELS: any = {
     ALL: "Semua",
     UMUM: "Umum",
     PEMDA: "Pemda",
-    AKADEMIK: "Akademik",
-    RUMAH_SAKIT: "Rumah Sakit",
-    POLISI_MILITER: "Polisi/Militer",
     PERBANKAN: "Perbankan",
 };
 
 // Delivery Option
-export const DELIVERY_OPTION_ITEMS = ["ALL", "DELIVERY", "PICKUP"];
+export const DELIVERY_OPTION_ITEMS = ["ALL", "SELF_PICKUP", "DELIVERY"];
 export const DELIVERY_OPTION_LABELS: any = {
     ALL: "Semua",
+    SELF_PICKUP: "Ambil di Tempat",
     DELIVERY: "Kirim ke Alamat",
-    PICKUP: "Ambil di Tempat",
 };
 
 export const PAYMENT_METHOD_ITEMS = ["ALL", "BANK_TRANSFER", "CASH", "CREDIT_CARD", "QRIS", "EWALLET", "CSTORE", "COD"];

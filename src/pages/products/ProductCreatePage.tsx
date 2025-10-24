@@ -1,7 +1,9 @@
 import { TitlePage } from "@/components/molecules";
 import { PRODUCT_FORM_ITEMS, ProductForm } from "@/components/organisms/products";
 import MainLayout from "@/components/templates/MainLayout";
+import { productSchema } from "@/schemas";
 import { axiosInstance } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TbLogout2 } from "react-icons/tb";
@@ -16,7 +18,8 @@ function ProductCreatePage() {
         control,
         getValues,
         formState: { errors },
-    } = useForm({
+    } = useForm<productSchema.CreateType>({
+        resolver: zodResolver(productSchema.create),
         defaultValues: {
             name: "",
             price: 0,
@@ -38,20 +41,20 @@ function ProductCreatePage() {
         }
     }, [errors]);
 
-    const onSubmit = handleSubmit(async (data: any) => {
+    const onSubmit = handleSubmit(async (data: productSchema.CreateType) => {
         setIsLoading(true);
         try {
             const formData = new FormData();
             for (const key in data) {
-                const value = data[key];
+                const value = data[key as keyof productSchema.CreateType];
 
                 // Handle multiple file upload
                 if (key === "images" && Array.isArray(value)) {
-                    value.forEach((file: File) => {
-                        formData.append(key, file);
+                    value.forEach((file) => {
+                        if (file instanceof File) formData.append(key, file);
                     });
                 } else {
-                    formData.append(key, value);
+                    formData.append(key, value.toString());
                 }
             }
             await axiosInstance.post("products", formData);

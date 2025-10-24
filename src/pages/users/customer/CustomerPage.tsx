@@ -4,7 +4,7 @@ import MainLayout from "@/components/templates/MainLayout";
 import { useUsers } from "@/hooks";
 
 function CustomerPage() {
-    const { users } = useUsers("customer");
+    const { users } = useUsers("customers");
     return (
         <MainLayout>
             <TitlePage title="Customer" subtitle="Menampilkan Data Customer Yang Terdaftar" />

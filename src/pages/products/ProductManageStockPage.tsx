@@ -1,7 +1,9 @@
 import { TitlePage } from "@/components/molecules";
 import { PRODUCT_STOCK_FORM_FIELDS, ProductForm } from "@/components/organisms/products";
 import MainLayout from "@/components/templates/MainLayout";
+import { productSchema } from "@/schemas";
 import { axiosInstance } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TbLogout2 } from "react-icons/tb";
@@ -19,25 +21,26 @@ function ProductManageStockPage() {
         formState: { errors },
         getValues,
         setValue,
-    } = useForm({
+    } = useForm<productSchema.ManageStockType>({
+        resolver: zodResolver(productSchema.manageStock),
         defaultValues: {
-            name: product?.name,
-            type: "",
+            name: product.name,
+            type: null,
             quantity: 0,
             note: "",
         },
     });
 
-    const onSubmit = handleSubmit(async(data) => {
+    const onSubmit = handleSubmit(async (data: productSchema.ManageStockType) => {
         setIsLoading(true);
         try {
-            await axiosInstance.post(`products/${product.id}/stock`, data);
+            await axiosInstance.patch(`products/${product.id}/stock`, data);
             localStorage.removeItem("productDetail");
             navigate("/products", {
                 state: {
                     message: "Perubahan pada stok produk berhasil disimpan",
                 },
-            })
+            });
         } catch (error: any) {
             console.log(error.response.data);
             if (error.response.status === 500) {
@@ -55,7 +58,6 @@ function ProductManageStockPage() {
             }
         } finally {
             setIsLoading(false);
-            
         }
     });
 

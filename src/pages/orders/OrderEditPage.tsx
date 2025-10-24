@@ -25,9 +25,9 @@ function OrderEditPage() {
         getValues,
         setValue,
         formState: { errors },
-    } = useForm<any>({
+    } = useForm<orderSchema.UpdateType>({
         resolver: zodResolver(orderSchema.update),
-        defaultValues: order,
+        // defaultValues: order,
     });
     
     const onSubmit = async (data: any) => {
@@ -47,7 +47,7 @@ function OrderEditPage() {
                     formData.append(key, value);
                 }
             }
-            await axiosInstance.put(`orders/admin/${id}/edit`, formData);
+            await axiosInstance.patch(`orders/myrekap/${id}`, formData);
 
             navigate("/orders", {
                 state: {

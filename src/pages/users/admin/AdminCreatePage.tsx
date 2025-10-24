@@ -1,7 +1,9 @@
 import { TitlePage } from "@/components/molecules";
 import { UserForm } from "@/components/organisms/users";
 import MainLayout from "@/components/templates/MainLayout";
+import { userSchema } from "@/schemas";
 import { axiosInstance } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TbLogout2 } from "react-icons/tb";
@@ -15,7 +17,8 @@ function AdminCreatePage() {
         control,
         handleSubmit,
         formState: { errors },
-    } = useForm<any>({
+    } = useForm<userSchema.CreateType>({
+        resolver: zodResolver(userSchema.create),
         defaultValues: {
             fullName: "",
             username: "",
@@ -39,18 +42,16 @@ function AdminCreatePage() {
         }
     }, [errors]);
 
-    const onSubmit = handleSubmit(async (data: any) => {
+    const onSubmit = handleSubmit(async (data: userSchema.CreateType) => {
         setIsLoading(true);
         try {
-            await axiosInstance.post("users/admin", data);
+            await axiosInstance.post("users/admins", data);
             navigate("/users/admin", {
                 state: {
-                    message:
-                        "User berhasil dibuat. Silahkan verifikasi email terlebih dahulu sebelum login",
+                    message: "User berhasil dibuat. Silahkan verifikasi email terlebih dahulu sebelum login",
                 },
             });
         } catch (error: any) {
-            console.log(error.response.data);
             if (error.response.status === 500) {
                 navigate("/users/admin", {
                     state: {

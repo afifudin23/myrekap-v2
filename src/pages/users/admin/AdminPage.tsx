@@ -10,7 +10,7 @@ import { MdAddToPhotos } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 
 const AdminPage = () => {
-    const { users, setUsers } = useUsers("admin");
+    const { users, setUsers } = useUsers("admins");
     const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
     // Alert

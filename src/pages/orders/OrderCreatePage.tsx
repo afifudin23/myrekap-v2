@@ -15,7 +15,6 @@ function OrderCreatePage() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
-    // Type Any, Next Fixing
     const {
         handleSubmit,
         control,
@@ -23,48 +22,46 @@ function OrderCreatePage() {
         getValues,
         setValue,
         formState: { errors },
-    } = useForm<any>({
+    } = useForm<orderSchema.CreateType>({
         resolver: zodResolver(orderSchema.create),
         defaultValues: {
             customerName: "",
-            // customerCategory: undefined,
+            customerCategory: undefined,
             phoneNumber: "",
             items: [{ productId: "", quantity: 1, message: "", price: 0 }],
+            readyDate: undefined,
             deliveryOption: undefined,
             deliveryAddress: "",
-            readyDate: undefined,
+            shippingCost: 0,
             paymentMethod: undefined,
             paymentProof: [],
         },
     });
 
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: orderSchema.CreateType) => {
+        console.log(data);
         setIsLoading(true);
         try {
             const formData = new FormData();
             for (const key in data) {
-                const value = data[key];
+                const value = data[key as keyof orderSchema.CreateType];
 
                 if (key === "paymentProof" && Array.isArray(value)) {
-                    value.map((file: File) => {
-                        formData.append(key, file);
+                    value.map((file) => {
+                        if (file instanceof File) formData.append(key, file);
                     });
                 } else if (typeof value === "object" && !(value instanceof File)) {
                     formData.append(key, JSON.stringify(value));
-                } else {
-                    formData.append(key, value);
+                } else if (value !== undefined) {
+                    formData.append(key, String(value));
                 }
             }
 
-            await axiosInstance.post("orders/admin", formData);
+            await axiosInstance.post("orders/myrekap", formData);
 
-            navigate("/orders", {
-                state: {
-                    message: "Pesanan baru berhasil ditambahkan",
-                },
-            });
-            // reset(defaultValuesAddOrderSummary);
+            navigate("/orders", { state: { message: "Pesanan baru berhasil ditambahkan" } });
         } catch (error: any) {
+            console.log(error.response.data);
             if (error.response.status === 500) {
                 navigate("/orders", {
                     state: {

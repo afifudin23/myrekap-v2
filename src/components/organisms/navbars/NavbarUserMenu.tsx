@@ -5,11 +5,11 @@ import { badgeColorUser } from "@/utils";
 //     role: string;
 // }
 
-function NavbarUserMenu({ username, role }: any) {
+function NavbarUserMenu({ fullName, role }: any) {
     return (
         <div className=" flex gap-1 items-center cursor-default">
             <div className="flex flex-col items-center">
-                <div className="text-lg font-nunito leading-none">{username}</div>
+                <div className="text-lg font-nunito leading-none">{fullName}</div>
                 <div
                     className={`text-sm relative font-semibold capitalize tracking-wide px-3 rounded-lg bg-opacity-40 ${
                         badgeColorUser(role)

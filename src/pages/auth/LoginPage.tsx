@@ -55,7 +55,7 @@ function LoginPage() {
             });
 
             setIsLoading(false);
-            useAuthStore.getState().setUser(response.data);
+            useAuthStore.getState().setUser(response.data.data);
             navigate("/dashboard");
         } catch (error: any) {
             const axiosError = error as AxiosError;

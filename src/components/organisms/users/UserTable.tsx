@@ -2,25 +2,18 @@ import { FaRegTrashAlt, FaPencilAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { badgeColorUser, formatters } from "@/utils";
 
-const UserTable = ({
-    settings,
-    handleDeleteUser,
-    users,
-}: any) => {
+const UserTable = ({ settings, handleDeleteUser, users }: any) => {
     return (
         <>
             <div className="overflow-auto rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.1)] hidden lg:block">
                 <table className="w-full text-sm 2xl:text-lg ">
                     <thead className="bg-gray-50 border-b-2 border-gray-300">
                         <tr className="tracking-wide font-semibold text-left cursor-default">
-                            <th className="p-3">ID</th>
+                            <th className="p-3">Kode User</th>
                             <th className="p-3">Username</th>
                             <th className="p-3">Telepon</th>
                             <th className="p-3">Email</th>
-                            <th className="p-3">Password</th>
                             <th className="p-3">Role</th>
-                            <th className="p-3">CreatedAt</th>
-                            <th className="p-3">UpdatedAt</th>
                             {settings && <th className="p-3">Settings</th>}
                         </tr>
                     </thead>
@@ -33,14 +26,13 @@ const UserTable = ({
                                 key={user.id}
                             >
                                 <td className="p-3 2xl:py-7 whitespace-nowrap">
-                                    <span className="font-semibold">{user.id.slice(0, 7)}xxx</span>
+                                    <span className="font-semibold">{user.userCode}</span>
                                 </td>
                                 <td className="p-3 2xl:py-7 whitespace-nowrap">{user.username}</td>
                                 <td className="p-3 2xl:py-7 whitespace-nowrap">{user.phoneNumber}</td>
                                 <td className="p-3 2xl:py-7 whitespace-nowrap">
                                     {formatters.simplyfyEmail(user.email)}
                                 </td>
-                                <td className="p-3 2xl:py-7 whitespace-nowrap">xxxxxx</td>
                                 <td className="p-3 2xl:py-7 whitespace-nowrap">
                                     <span
                                         className={`font-semibold uppercase tracking-wide p-1.5 rounded-lg bg-opacity-40 ${badgeColorUser(
@@ -48,16 +40,6 @@ const UserTable = ({
                                         )}`}
                                     >
                                         {user.role}
-                                    </span>
-                                </td>
-                                <td className="p-3 2xl:py-7 whitespace-nowrap">
-                                    <span className="font-semibold p-1.5 rounded-lg bg-opacity-40 text-slate-700 bg-slate-300">
-                                        {formatters.isoDateToStringDateTime(user.createdAt)}
-                                    </span>
-                                </td>
-                                <td className="p-3 2xl:py-7 whitespace-nowrap">
-                                    <span className="font-semibold p-1.5 rounded-lg bg-opacity-40 text-slate-700 bg-slate-300">
-                                        {formatters.isoDateToStringDateTime(user.updatedAt)}
                                     </span>
                                 </td>
                                 {settings && (
@@ -94,8 +76,8 @@ const UserTable = ({
                             {settings && (
                                 <div className="flex gap-2">
                                     <Link
-                                        to={`/administrator/edit/${user.id}`}
-                                        state={user}
+                                        to={`/users/admin/${user.id}/edit`}
+                                        onClick={() => localStorage.setItem("userSelected", JSON.stringify(user))}
                                         className="py-1.5 px-2 bg-amber-400 bg-opacity-90 rounded-lg"
                                     >
                                         <FaPencilAlt className="text-amber-100" />
@@ -111,7 +93,6 @@ const UserTable = ({
                                 <p>
                                     {user.username} ({user.phoneNumber})
                                 </p>
-                                <p>xxxxxxxx</p>
                             </div>
                             <div className="flex justify-between items-center">
                                 <p>{formatters.simplyfyEmail(user.email)}</p>
@@ -123,20 +104,10 @@ const UserTable = ({
                                     {user.role}
                                 </p>
                             </div>
-                            <div className="flex justify-between">
-                                <p className="font-semibold px-1 rounded-lg bg-opacity-40 text-slate-700 bg-slate-300">
-                                    {formatters.isoDateToStringDateTime(user.createdAt)}
-                                </p>
-                                <p className="font-semibold px-1 rounded-lg bg-opacity-40 text-slate-700 bg-slate-300">
-                                    {formatters.isoDateToStringDateTime(user.updatedAt)}
-                                </p>
-                            </div>
                         </div>
                     </div>
                 ))}
             </div>
-
-            
         </>
     );
 };

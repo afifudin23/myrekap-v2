@@ -41,4 +41,5 @@ export type InputMoneyProps = {
     label: string;
     control: Control<any>;
     error?: string;
+    disabled?: boolean;
 };
