@@ -19,9 +19,9 @@ import {
 } from "@/pages/reports";
 import { LoginPage } from "@/pages/auth";
 import { DashboardPage } from "@/pages/dashboard";
-import VerifyEmailPage from "../pages/auth/VerifyEmailPage";
 import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
+import OTPVerificationPage from "@/pages/auth/OTPVerificationPage";
 
 function AppRouter() {
     return (
@@ -31,7 +31,7 @@ function AppRouter() {
 
                 <Route path="/auth">
                     <Route path="login" element={<LoginPage />} />
-                    <Route path="verify-email" element={<VerifyEmailPage />} />
+                    <Route path="verify-otp" element={<OTPVerificationPage />} />
                     <Route path="forgot-password" element={<ForgotPasswordPage />} />
                     <Route path="reset-password" element={<ResetPasswordPage />} />
                 </Route>

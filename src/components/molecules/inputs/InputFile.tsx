@@ -7,21 +7,25 @@ import { Controller } from "react-hook-form";
 type ImageItem = File | { fileName: string; size: number; secureUrl: string; publicId: string };
 
 const InputFile = React.forwardRef<HTMLDivElement, InputFileProps>(
-    ({ label, name, control, error, disabled = false, setValue, getValues }, ref) => {
+    ({ label, name, control, error, disabled = false, multiple = false, setValue, getValues }, ref) => {
         return (
-            <div className="input-text" ref={ref}>
+            <div className="flex flex-col gap-3" ref={ref}>
                 <Label id={name} children={label} />
                 <Controller
-                    name={name as any}
+                    name={name as string}
                     control={control}
-                    render={({ field: { onChange, value = [] } }) => {
+                    render={({ field: { onChange, value } }) => {
+                        const files = value ?? [];
                         const { getRootProps, getInputProps, isDragActive } = useDropzone({
                             accept: { "image/*": [] },
-                            multiple: true,
+                            multiple,
                             onDrop: (acceptedFiles) => {
                                 if (disabled) return;
-                                const newFiles = acceptedFiles.map((file) => file);
-                                onChange([...value, ...newFiles]);
+                                if (!multiple) {
+                                    onChange(acceptedFiles.slice(0, 1));
+                                } else {
+                                    onChange([...files, ...acceptedFiles]);
+                                }
                             },
                             disabled,
                         });
@@ -30,9 +34,9 @@ const InputFile = React.forwardRef<HTMLDivElement, InputFileProps>(
                             const updated = [...value];
                             const removedItem = updated[index];
 
-                            if (!(removedItem instanceof File) && removedItem?.publicId) {
-                                const current = getValues("publicIdsToDelete") || [];
-                                setValue("publicIdsToDelete", [...current, removedItem.publicId]);
+                            if (!(removedItem instanceof File) && removedItem?.id) {
+                                const current = getValues("idsToDelete") || [];
+                                setValue("idsToDelete", [...current, removedItem.id]);
                             }
 
                             updated.splice(index, 1);
@@ -44,12 +48,11 @@ const InputFile = React.forwardRef<HTMLDivElement, InputFileProps>(
                                 .filter((item: ImageItem) => !(item instanceof File) && item?.publicId)
                                 .map((item: any) => item.publicId);
 
-                            const current = getValues("publicIdsToDelete") || [];
-                            setValue?.("publicIdsToDelete", [...current, ...publicIdsToRemove]);
+                            const current = getValues("idsToDelete") || [];
+                            setValue?.("idsToDelete", [...current, ...publicIdsToRemove]);
 
                             onChange([]);
                         };
-
                         return (
                             <div
                                 {...getRootProps()}
@@ -90,8 +93,10 @@ const InputFile = React.forwardRef<HTMLDivElement, InputFileProps>(
                                         <ul className="space-y-4">
                                             {value.map((file: ImageItem, i: number) => {
                                                 const isFile = file instanceof File;
-                                                const imageUrl = isFile ? URL.createObjectURL(file) : file.secureUrl;
                                                 const fileName = isFile ? file.name : file.fileName;
+                                                const imageUrl = isFile
+                                                    ? URL.createObjectURL(file)
+                                                    : file.secureUrl;
                                                 const fileSize = (file.size / 1024).toFixed(2);
 
                                                 return (

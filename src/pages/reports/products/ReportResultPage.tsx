@@ -23,8 +23,11 @@ function ReportProductStockResultPage() {
     useEffect(() => {
         const getOrderFilter = async () => {
             try {
-                const response = await axiosInstance.get("/products/stock-report", { params });
+                if (params.type === "summary")
+                    await axiosInstance.post("/products/stocks/monthly", { month: params.month, year: params.year });
+                const response = await axiosInstance.get("/products/stocks/monthly", { params });
                 const data = response.data.data;
+                console.log(data)
                 setReportStock(data);
             } catch (error) {
                 console.error("Error fetching order filter:", error);

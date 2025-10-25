@@ -135,14 +135,13 @@ function OrderForm({ onSubmit, fieldRefs, control, watch, errors, getValues, set
                                 name={item.name}
                                 control={control}
                                 ref={(el) => (fieldRefs.current[item.name] = el)}
-                                disabled={paymentMethod !== "BANK_TRANSFER"}
+                                disabled={paymentMethod !== "BANK_TRANSFER" || isPaid === false}
+                                multiple={false}
                                 error={getErrorMessage(item.name, errors)}
                                 getValues={getValues}
                                 setValue={setValue}
                             />
                         );
-                    default:
-                        return null;
                 }
             })}
             <h1>Biaya Pengiriman: {formatters.formatRupiah(shippingCost)}</h1>

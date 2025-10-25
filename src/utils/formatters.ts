@@ -89,7 +89,8 @@ const formatters = {
     },
 
     parseInputOrder(data: any) {
-        const paymentProof = data.images.find((img: any) => img.type === "PAYMENT_PROOF");
+        const paymentProof = data.images?.find((img: any) => img.type === "PAYMENT_PROOF");
+        console.log(paymentProof)
         return {
             customerName: data.customerName,
             customerCategory: data.customerCategory,

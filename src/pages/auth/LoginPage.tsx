@@ -15,6 +15,7 @@ import AuthTemplate from "@/components/templates/AuthTemplate";
 function LoginPage() {
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [email, setEmail] = useState<string>("");
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const navigate = useNavigate();
 
@@ -53,6 +54,13 @@ function LoginPage() {
                 username: data.username,
                 password: data.password,
             });
+            const resData = response.data.data;
+            if (resData.needVerification) {
+                setEmail(resData.email);
+                setMessage("Email belum terverifikasi. Mengalihkan ke halaman verifikasi...");
+                setShowAlert(true);
+                return;
+            }
 
             setIsLoading(false);
             useAuthStore.getState().setUser(response.data.data);
@@ -84,7 +92,16 @@ function LoginPage() {
 
             {/* Custom Alert */}
             <AnimatePresence>
-                {showAlert && <AlertInfo handleAlert={() => setShowAlert(false)} message={message} />}
+                {showAlert && (
+                    <AlertInfo
+                        handleAlert={() => {
+                            if (message.includes("Email belum terverifikasi"))
+                                navigate("/auth/verify-otp", { state: { email, type: "email_verification" } });
+                            setShowAlert(false);
+                        }}
+                        message={message}
+                    />
+                )}
             </AnimatePresence>
 
             {/* Loading */}

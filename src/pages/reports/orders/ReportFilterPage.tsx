@@ -40,10 +40,10 @@ const ReportOrderFilterPage = () => {
             const params = new URLSearchParams({
                 from_date: filter.fromDate.toISOString(),
                 to_date: filter.toDate.toISOString(),
-                customer_category: filter.customerCategory.toLowerCase(),
-                payment_method: filter.paymentMethod.toLowerCase(),
-                payment_status: filter.paymentStatus.toLowerCase(),
-                order_status: filter.orderStatus.toLowerCase(),
+                customer_category: filter.customerCategory,
+                payment_method: filter.paymentMethod,
+                payment_status: filter.paymentStatus,
+                order_status: filter.orderStatus,
             });
 
             reset(DEFAULT_VALUE_REPORT_ORDER);

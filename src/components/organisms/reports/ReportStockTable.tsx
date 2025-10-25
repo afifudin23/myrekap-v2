@@ -87,8 +87,8 @@ function ReportStockTable({ reportStock }: any) {
                             ? reportStock.map((stock: any, index: number) => (
                                 <tr key={index}>
                                     <td className="border p-2 border-slate-700 text-center">{index + 1}</td>
-                                    <td className="border p-2 border-slate-700">{stock.productCode}</td>
-                                    <td className="border p-2 border-slate-700">{stock.productName}</td>
+                                    <td className="border p-2 border-slate-700">{stock.product.productCode}</td>
+                                    <td className="border p-2 border-slate-700">{stock.product.name}</td>
                                     <td className="border p-2 border-slate-700">{stock.initialStock}</td>
                                     <td className="border p-2 border-slate-700">{stock.stockIn}</td>
                                     <td className="border p-2 border-slate-700">{stock.stockOut}</td>

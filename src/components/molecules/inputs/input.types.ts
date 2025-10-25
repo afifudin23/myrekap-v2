@@ -32,9 +32,11 @@ export type InputFileProps = {
     error?: string;
     control: Control<any>;
     disabled?: boolean;
+    multiple?: boolean;
     setValue?: any; // Fix NoImplicitAny
     getValues?: any;
 };
+
 
 export type InputMoneyProps = {
     name: string;

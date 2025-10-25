@@ -11,6 +11,15 @@ import { useForm } from "react-hook-form";
 import { TbLogout2 } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 
+export interface ImageType {
+    id: string;
+    type: string;
+    fileName: string;
+    size: number;
+    url: string;
+    orderId: string;
+}
+
 function OrderDetailPage() {
     const navigate = useNavigate();
     const [order, setOrder] = useState(JSON.parse(localStorage.getItem("orderDetail") || "{}"));
@@ -20,16 +29,19 @@ function OrderDetailPage() {
     const [isOpenUpdateProgress, setIsOpenUpdateProgress] = useState(false);
     const [isOpenPaymentProof, setIsOpenPaymentProof] = useState(false);
     const printRef = useRef<HTMLDivElement>(null);
+    const paymentProof = order.images?.find((img: ImageType) => img.type === "PAYMENT_PROOF");
+    const finishedProduct = order.images?.find((img: ImageType) => img.type === "FINISHED_PRODUCT");
 
     const {
         control,
-        reset,
+        setValue,
         handleSubmit,
         formState: { errors },
     } = useForm({
         defaultValues: {
-            finishedProduct: order.finishedProduct?.secureUrl,
-            orderStatus: order.orderStatus,
+            finishedProduct,
+            status: order.orderStatus,
+            isDeleteImage: false,
         },
     });
 
@@ -41,29 +53,26 @@ function OrderDetailPage() {
         setIsLoading(false);
     }, []);
 
-    const handleFinishedProduct = async (data: any) => {
+    const handleUpdateStatus = async (data: any) => {
         setIsLoading(true);
         try {
             const formData = new FormData();
-            formData.append("orderStatus", data.orderStatus);
+            formData.append("status", String(data.status));
+            formData.append("isDeleteImage", String(data.isDeleteImage));
             formData.append("finishedProduct", data.finishedProduct);
-            const response = await axiosInstance.patch(`orders/admin/${order.id}/update-progress`, formData);
+            const response = await axiosInstance.patch(`orders/myrekap/${order.id}/status`, formData);
             const resData = response.data.data;
             const updatedOrder = {
                 ...order,
-                finishedProduct: resData.finishedProduct,
                 orderStatus: resData.orderStatus,
-                paymentStatus: resData.paymentStatus,
+                images: resData.images,
             };
 
             localStorage.setItem("orderDetail", JSON.stringify(updatedOrder));
             setOrder(updatedOrder);
+            
             setShowAlert(true);
             setMessage("Progres berhasil diperbarui");
-            reset({
-                finishedProduct: updatedOrder.finishedProduct?.secureUrl,
-                orderStatus: updatedOrder.orderStatus,
-            });
         } catch (error: any) {
             console.log(error.response.data);
             if (error.response.status === 500) {
@@ -78,6 +87,10 @@ function OrderDetailPage() {
             setIsLoading(false);
             setIsOpenUpdateProgress(false);
         }
+    };
+    const handleDeleteFinishedProduct = () => {
+        setValue("finishedProduct", null);
+        setValue("isDeleteImage", true);
     };
 
     const handlePrintPdf = async () => {
@@ -114,6 +127,7 @@ function OrderDetailPage() {
                 setIsOpenPaymentProof={setIsOpenPaymentProof}
                 printRef={printRef}
                 handlePrintPdf={handlePrintPdf}
+                paymentProof={paymentProof}
             />
 
             {/* PaymentProof */}
@@ -127,7 +141,7 @@ function OrderDetailPage() {
                         onClick={(e) => e.stopPropagation()}
                     >
                         <img
-                            src={order.paymentProof?.secureUrl}
+                            src={paymentProof.secureUrl}
                             alt={`Bukti pembayaran atas nama ${order.customerName}`}
                             className="max-w-[90vw] max-h-[80vh] object-contain"
                         />
@@ -142,29 +156,27 @@ function OrderDetailPage() {
                     onClick={() => setIsOpenUpdateProgress(false)}
                 >
                     <form
-                        onSubmit={handleSubmit(handleFinishedProduct)}
+                        onSubmit={handleSubmit(handleUpdateStatus)}
                         className="bg-white p-6 rounded-lg shadow-lg w-2/4 h-4/5 space-y-10"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <InputDropdown
                             label="Status Pesanan"
-                            name="orderStatus"
+                            name="status"
                             control={control}
                             className="py-1 2xl:py-2 px-4 text-base 2xl:text-xl"
                             options={ORDER_STATUS_ITEMS.filter((item) => {
-                                const excludedLabels = ["Semua"];
-                                if (order.deliveryOption === "PICKUP") excludedLabels.push("Pengiriman");
+                                const excludedLabels = ["ALL"];
+                                if (order.deliveryOption === "SELF_PICKUP") excludedLabels.push("DELIVERY");
                                 return !excludedLabels.includes(item);
                             })}
                             optionLabel={ORDER_STATUS_LABELS}
                         />
                         <InputFinishedProduct
                             control={control}
-                            handleSubmit={handleSubmit}
-                            handleFinishedProduct={handleFinishedProduct}
-                            setIsOpenUpdateProgress={setIsOpenUpdateProgress}
                             errors={errors}
-                            finishedProduct={order.finishedProduct?.secureUrl}
+                            finishedProduct={finishedProduct}
+                            handleDelete={() => handleDeleteFinishedProduct()}
                         />
                         <ButtonSmall
                             type="submit"

@@ -3,6 +3,7 @@ import OrderReceipt from "@/components/organisms/orders/OrderReceipt";
 import { IoReceiptSharp } from "react-icons/io5";
 import { Badge, ButtonSmall } from "@/components/atoms";
 import {
+    CUSTOMER_CATEGORY_LABELS,
     DELIVERY_OPTION_LABELS,
     ORDER_STATUS_LABELS,
     PAYMENT_METHOD_LABELS,
@@ -18,6 +19,7 @@ import { MdOutlineDownloadForOffline } from "react-icons/md";
 
 function OrderDetailSection({
     order,
+    paymentProof,
     isOpenUpdateProgress,
     setIsOpenUpdateProgress,
     setIsOpenPaymentProof,
@@ -49,9 +51,9 @@ function OrderDetailSection({
                         >
                             {ORDER_STATUS_LABELS[order.orderStatus]}
                         </Badge>
-                        {/* <Badge className="bg-[#609393] w-[120px] py-1 text-sm text-white font-semibold">
+                        <Badge className="bg-[#609393] w-[120px] py-1 text-sm text-white font-semibold">
                             {CUSTOMER_CATEGORY_LABELS[order.customerCategory]}
-                        </Badge> */}
+                        </Badge>
                     </div>
                 </div>
                 <div className="flex gap-2 items-center">
@@ -116,11 +118,8 @@ function OrderDetailSection({
                         </p>
                         <p className="flex flex-wrap items-center gap-1">
                             Provider :{" "}
-                            <span className="font-medium whitespace-nowrap">
-                                {order.paymentProof || order.paymentProvider
-                                    ? order.paymentProvider?.split("_").join(" ")
-                                    : "-"}{" "}
-                                {order.paymentMethod === "BANK_TRANSFER" && order.paymentProof && (
+                            <p className="font-medium whitespace-nowrap">
+                                {order.paymentMethod === "BANK_TRANSFER" && paymentProof ? (
                                     <button
                                         className="flex w-full text-blue-600 items-center gap-1 font-medium"
                                         onClick={() => setIsOpenPaymentProof(true)}
@@ -128,8 +127,8 @@ function OrderDetailSection({
                                         <TbReceiptFilled />
                                         Bukti Pembayaran
                                     </button>
-                                )}
-                            </span>
+                                ): "-"}
+                            </p>
                         </p>
                     </div>
                     <div>

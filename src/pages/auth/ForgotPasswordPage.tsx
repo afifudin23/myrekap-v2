@@ -19,11 +19,11 @@ function ForgotPasswordPage() {
     } = useForm<any>({ defaultValues: { email: "" } });
     const onSubmit = handleSubmit(async (data) => {
         try {
-            await axiosInstance.post("/auth/forgot-password", data);
+            await axiosInstance.post("/auth/otp/resend", { email: data.email, type: "password_reset" });
             alert("Email reset sudah dikirim, silakan dicek!");
             setMessage("");
             reset({ email: "" });
-            navigate("/auth/login");
+            navigate("/auth/verify-otp", { state: { email: data.email, type: "password_reset" } });
         } catch (error: any) {
             const axiosError = error as AxiosError;
             if (axiosError.code === "ERR_NETWORK") {

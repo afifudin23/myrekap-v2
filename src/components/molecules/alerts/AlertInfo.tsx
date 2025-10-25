@@ -1,6 +1,20 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
-function AlertInfo({ handleAlert, message }: any) {
+interface AlertInfoProps {
+    handleAlert: () => void;
+    message: string;
+}
+
+function AlertInfo({ handleAlert, message }: AlertInfoProps) {
+    // auto jalan setelah 3 detik
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            handleAlert();
+        }, 3000);
+        return () => clearTimeout(timer);
+    }, [handleAlert]);
+
     return (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 ">
             <motion.div

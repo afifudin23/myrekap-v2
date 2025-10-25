@@ -8,12 +8,12 @@ import { AxiosError } from "axios";
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ResetPasswordPage() {
     const [message, setMessage] = useState("");
-    const [searchParams] = useSearchParams();
-    const token = searchParams.get("token");
+    const state = useLocation().state as { token: string } | null;
+    const token = state?.token;
     const [isLoading, setIsLoading] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
 
@@ -30,12 +30,14 @@ function ResetPasswordPage() {
     const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
         try {
-            await axiosInstance.post("/auth/reset-password", { ...data, token });
+            console.log(token);
+            await axiosInstance.patch("/auth/reset-password", data, { headers: { Authorization: `Bearer ${token}` } });
             alert("Reset berhasil! Sekarang kamu bisa masuk dengan kata sandi baru.");
             setMessage("");
             reset({ password: "", confirmPassword: "" });
             navigate("/auth/login");
         } catch (error: any) {
+            console.log(error.response.data);
             const axiosError = error as AxiosError;
             if (axiosError.code === "ERR_NETWORK") {
                 setMessage("Tidak Dapat Terhubung Ke Server. Periksa Koneksi Internet Anda");

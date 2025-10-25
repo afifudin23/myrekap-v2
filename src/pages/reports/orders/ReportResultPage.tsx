@@ -26,7 +26,7 @@ function ReportOrderResultPage() {
     useEffect(() => {
         const getOrderFilter = async () => {
             try {
-                const response = await axiosInstance.get("/orders/admin", { params });
+                const response = await axiosInstance.get("/orders/myrekap", { params });
                 const data = response.data.data.map((order: any) => formatters.formatReportOrder(order));
                 setOrderFilter(data);
             } catch (error) {
