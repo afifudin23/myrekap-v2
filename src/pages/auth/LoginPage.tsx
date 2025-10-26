@@ -5,12 +5,12 @@ import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "@/utils/axiosInstance";
-import { loginFormSchema, LoginFormType } from "@/schemas";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { AnimatePresence } from "framer-motion";
 import { AlertInfo } from "@/components/molecules";
 import { Loading } from "@/components/atoms";
 import AuthTemplate from "@/components/templates/AuthTemplate";
+import { authSchema } from "@/schemas";
 
 function LoginPage() {
     const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -43,11 +43,11 @@ function LoginPage() {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<LoginFormType>({
-        resolver: zodResolver(loginFormSchema),
+    } = useForm<authSchema.LoginType>({
+        resolver: zodResolver(authSchema.login),
     });
 
-    const onSubmit = async (data: LoginFormType) => {
+    const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
         try {
             const response = await axiosInstance.post("auth/login", {
@@ -78,13 +78,13 @@ function LoginPage() {
             setIsLoading(false);
             setTimeout(() => setShowAlert(false), 3000);
         }
-    };
+    });
     return (
         <AuthTemplate description="Masuk untuk mengelola pesanan dan melihat laporan rekap pelanggan.">
             <AuthForm
                 fields={LOGIN_FIELDS}
                 register={register}
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={onSubmit}
                 errors={errors}
                 buttonName="Masuk"
                 formType="login"

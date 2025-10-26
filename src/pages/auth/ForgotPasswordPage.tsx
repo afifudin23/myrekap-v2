@@ -2,7 +2,9 @@ import { FORGOT_PASSWORD_FIELDS } from "@/components/organisms/auth";
 import AuthForm from "@/components/organisms/auth/AuthForm";
 import AuthTemplate from "@/components/templates/AuthTemplate";
 import { COLORS } from "@/constants/colors";
+import { authSchema } from "@/schemas";
 import { axiosInstance } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -16,7 +18,7 @@ function ForgotPasswordPage() {
         handleSubmit,
         reset,
         formState: { errors },
-    } = useForm<any>({ defaultValues: { email: "" } });
+    } = useForm<authSchema.ForgotPasswordType>({ resolver: zodResolver(authSchema.forgotPassword) });
     const onSubmit = handleSubmit(async (data) => {
         try {
             await axiosInstance.post("/auth/otp/resend", { email: data.email, type: "password_reset" });

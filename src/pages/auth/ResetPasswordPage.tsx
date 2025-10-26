@@ -3,7 +3,9 @@ import { AlertInfo } from "@/components/molecules";
 import { RESET_PASSWORD_FIELDS } from "@/components/organisms/auth";
 import AuthForm from "@/components/organisms/auth/AuthForm";
 import AuthTemplate from "@/components/templates/AuthTemplate";
+import { authSchema, userSchema } from "@/schemas";
 import { axiosInstance } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
@@ -21,20 +23,16 @@ function ResetPasswordPage() {
     const {
         register,
         handleSubmit,
-        reset,
         formState: { errors },
-    } = useForm<any>({
-        defaultValues: { password: "", confirmPassword: "" },
+    } = useForm<authSchema.ResetPasswordType>({
+        resolver: zodResolver(authSchema.resetPassword),
     });
 
     const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
         try {
-            console.log(token);
             await axiosInstance.patch("/auth/reset-password", data, { headers: { Authorization: `Bearer ${token}` } });
             alert("Reset berhasil! Sekarang kamu bisa masuk dengan kata sandi baru.");
-            setMessage("");
-            reset({ password: "", confirmPassword: "" });
             navigate("/auth/login");
         } catch (error: any) {
             console.log(error.response.data);
