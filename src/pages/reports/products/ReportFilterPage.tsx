@@ -1,10 +1,13 @@
-import { InputMonthYear, TitlePage } from "@/components/molecules";
+import { AlertInfo, InputMonthYear, TitlePage } from "@/components/molecules";
 import {
     DEFAULT_VALUE_REPORT_PRODUCT_STOCK,
     REPORT_PRODUCT_STOCK_FORM_FIELDS,
     ReportForm,
 } from "@/components/organisms/reports";
 import MainLayout from "@/components/templates/MainLayout";
+import { reportSchema } from "@/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TbLogout2 } from "react-icons/tb";
@@ -19,8 +22,8 @@ function ReportProductStockFilterPage() {
         control,
         reset,
         formState: { errors },
-    } = useForm<any>({
-        // resolver: zodResolver(reportOrderSchema),
+    } = useForm<reportSchema.ProductStocksType>({
+        resolver: zodResolver(reportSchema.productStocks),
         defaultValues: DEFAULT_VALUE_REPORT_PRODUCT_STOCK,
     });
 
@@ -30,14 +33,10 @@ function ReportProductStockFilterPage() {
         const errorRef = fieldRefs.current[firstErrorField];
 
         // Delay scroll agar DOM sempat update (error message muncul)
-        if (errorRef) {
-            setTimeout(() => {
-                errorRef.scrollIntoView({ behavior: "smooth", block: "center" });
-            }, 50);
-        }
+        if (errorRef) setTimeout(() => errorRef.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
     }, [errors]);
 
-    const onSubmit = (filter: any) => {
+    const onSubmit = handleSubmit((filter) => {
         const month = filter.monthYear ? filter.monthYear.getMonth() + 1 : new Date().getMonth() + 1; // getMonth() is zero-based
         const year = filter.monthYear ? filter.monthYear.getFullYear() : new Date().getFullYear();
         const params = new URLSearchParams({
@@ -48,7 +47,7 @@ function ReportProductStockFilterPage() {
 
         reset(DEFAULT_VALUE_REPORT_PRODUCT_STOCK);
         navigate(`/reports/products/result?${params}`);
-    };
+    });
     return (
         <MainLayout>
             <div className="flex justify-between items-center">
@@ -60,13 +59,10 @@ function ReportProductStockFilterPage() {
 
             <ReportForm
                 fields={REPORT_PRODUCT_STOCK_FORM_FIELDS}
-                handleSubmit={handleSubmit}
+                onSubmit={onSubmit}
                 control={control}
                 errors={errors}
                 fieldRefs={fieldRefs}
-                onSubmit={onSubmit}
-                showAlert={showAlert}
-                setShowAlert={setShowAlert}
                 inputDate={
                     <Controller
                         name="monthYear"
@@ -77,6 +73,12 @@ function ReportProductStockFilterPage() {
                     />
                 }
             />
+
+            <AnimatePresence>
+                {showAlert && (
+                    <AlertInfo handleAlert={() => setShowAlert(false)} message="Rekap filter berhasil dicetak" />
+                )}
+            </AnimatePresence>
         </MainLayout>
     );
 }

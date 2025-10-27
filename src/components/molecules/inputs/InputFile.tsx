@@ -35,8 +35,8 @@ const InputFile = React.forwardRef<HTMLDivElement, InputFileProps>(
                             const removedItem = updated[index];
 
                             if (!(removedItem instanceof File) && removedItem?.id) {
-                                const current = getValues("idsToDelete") || [];
-                                setValue("idsToDelete", [...current, removedItem.id]);
+                                const current = getValues("publicIdsToDelete") || [];
+                                setValue("publicIdsToDelete", [...current, removedItem.publicId]);
                             }
 
                             updated.splice(index, 1);

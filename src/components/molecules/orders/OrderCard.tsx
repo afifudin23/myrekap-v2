@@ -13,7 +13,7 @@ const OrderCard = ({ order }: any) => {
             {/* Header */}
             <div className="2xl:flex justify-between items-center gap-2 hidden">
                 <Badge className="text-xs font-semibold px-2 py-1 bg-slate-800 bg-opacity-40 text-white">
-                    {"#" + order.orderCode}
+                    {order.orderCode}
                 </Badge>
                 <div className="flex gap-2">
                     <Badge

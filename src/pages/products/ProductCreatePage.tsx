@@ -1,3 +1,4 @@
+import { Loading } from "@/components/atoms";
 import { TitlePage } from "@/components/molecules";
 import { PRODUCT_FORM_ITEMS, ProductForm } from "@/components/organisms/products";
 import MainLayout from "@/components/templates/MainLayout";
@@ -24,6 +25,7 @@ function ProductCreatePage() {
             name: "",
             price: 0,
             description: "",
+            isActive: true,
             images: [],
         },
     });
@@ -41,7 +43,7 @@ function ProductCreatePage() {
         }
     }, [errors]);
 
-    const onSubmit = handleSubmit(async (data: productSchema.CreateType) => {
+    const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
         try {
             const formData = new FormData();
@@ -58,24 +60,14 @@ function ProductCreatePage() {
                 }
             }
             await axiosInstance.post("products", formData);
-            navigate("/products", {
-                state: {
-                    message: "Produk baru berhasil ditambahkan",
-                },
-            });
+            navigate("/products", { state: { message: "Produk baru berhasil ditambahkan" } });
         } catch (error: any) {
             if (error.response.status === 500) {
                 navigate("/products", {
-                    state: {
-                        message: "Oops! Server mengalami kendala teknis. Tim kami akan segera menanganinya",
-                    },
+                    state: { message: "Oops! Server mengalami kendala teknis. Tim kami akan segera menanganinya" },
                 });
             } else {
-                navigate("/products", {
-                    state: {
-                        message: error.response.data.message,
-                    },
-                });
+                navigate("/products", { state: { message: error.response.data.message } });
             }
         } finally {
             setIsLoading(false);
@@ -97,11 +89,11 @@ function ProductCreatePage() {
                 control={control}
                 onSubmit={onSubmit}
                 errors={errors}
-                isLoading={isLoading}
                 getValues={getValues}
                 fieldRefs={fieldRefs}
                 fields={PRODUCT_FORM_ITEMS}
             />
+            {isLoading && <Loading />}
         </MainLayout>
     );
 }

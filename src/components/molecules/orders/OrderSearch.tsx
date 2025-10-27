@@ -4,7 +4,7 @@ import {  CUSTOMER_CATEGORY_ITEMS, CUSTOMER_CATEGORY_LABELS, ORDER_STATUS_ITEMS,
 import { useState } from "react";
 import { IoFilterSharp } from "react-icons/io5";
 
-const Search = ({
+const OrderSearch = ({
     searchTerm,
     setSearchTerm,
     filterCustomer,
@@ -44,4 +44,4 @@ const Search = ({
     );
 };
 
-export default Search;
+export default OrderSearch;

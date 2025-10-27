@@ -1,3 +1,4 @@
+import { Loading } from "@/components/atoms";
 import { TitlePage } from "@/components/molecules";
 import { PRODUCT_STOCK_FORM_FIELDS, ProductForm } from "@/components/organisms/products";
 import MainLayout from "@/components/templates/MainLayout";
@@ -25,36 +26,26 @@ function ProductManageStockPage() {
         resolver: zodResolver(productSchema.manageStock),
         defaultValues: {
             name: product.name,
-            type: null,
+            type: undefined,
             quantity: 0,
             note: "",
         },
     });
 
-    const onSubmit = handleSubmit(async (data: productSchema.ManageStockType) => {
+    const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
         try {
             await axiosInstance.patch(`products/${product.id}/stock`, data);
             localStorage.removeItem("productDetail");
-            navigate("/products", {
-                state: {
-                    message: "Perubahan pada stok produk berhasil disimpan",
-                },
-            });
+            navigate("/products", { state: { message: "Perubahan pada stok produk berhasil disimpan" } });
         } catch (error: any) {
             console.log(error.response.data);
             if (error.response.status === 500) {
                 navigate("/products", {
-                    state: {
-                        message: "Oops! Server mengalami kendala teknis. Tim kami akan segera menanganinya",
-                    },
+                    state: { message: "Oops! Server mengalami kendala teknis. Tim kami akan segera menanganinya" },
                 });
             } else {
-                navigate("/products", {
-                    state: {
-                        message: error.response.data.message,
-                    },
-                });
+                navigate("/products", { state: { message: error.response.data.message } });
             }
         } finally {
             setIsLoading(false);
@@ -65,11 +56,7 @@ function ProductManageStockPage() {
         <MainLayout>
             <div className="flex justify-between">
                 <TitlePage title="Edit Produk" subtitle="Mengelola Data Produk Penjualan" />
-                <button
-                    onClick={() => {
-                        navigate("/products");
-                    }}
-                >
+                <button onClick={() => navigate("/products")}>
                     <TbLogout2 className="text-5xl 2xl:text-6xl" />
                 </button>
             </div>
@@ -78,12 +65,12 @@ function ProductManageStockPage() {
                 control={control}
                 onSubmit={onSubmit}
                 errors={errors}
-                isLoading={isLoading}
                 fieldRefs={fieldRefs}
                 getValues={getValues}
                 setValue={setValue}
                 fields={PRODUCT_STOCK_FORM_FIELDS}
             />
+            {isLoading && <Loading />}
         </MainLayout>
     );
 }

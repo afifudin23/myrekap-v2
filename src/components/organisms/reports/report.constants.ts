@@ -8,6 +8,7 @@ import {
     TYPE_STOCK_REPORT_ITEMS,
     TYPE_STOCK_REPORT_LABELS,
 } from "@/constants/category";
+import { reportSchema } from "@/schemas";
 
 export const REPORT_ORDER_FORM_FIELDS = [
     // {
@@ -56,5 +57,5 @@ export const REPORT_PRODUCT_STOCK_FORM_FIELDS = [
 
 export const DEFAULT_VALUE_REPORT_PRODUCT_STOCK = {
     monthYear: new Date(),
-    type: "summary",
+    type: "GENERAL" as reportSchema.ProductStocksType["type"],
 };

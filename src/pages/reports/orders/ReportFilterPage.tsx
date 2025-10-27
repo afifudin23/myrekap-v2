@@ -1,8 +1,9 @@
-import { InputDate, TitlePage } from "@/components/molecules";
+import { AlertInfo, InputDate, TitlePage } from "@/components/molecules";
 import { DEFAULT_VALUE_REPORT_ORDER, REPORT_ORDER_FORM_FIELDS, ReportForm } from "@/components/organisms/reports";
 import MainLayout from "@/components/templates/MainLayout";
-import { reportOrderSchema, ReportOrderType } from "@/schemas";
+import { reportSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -18,8 +19,8 @@ const ReportOrderFilterPage = () => {
         control,
         reset,
         formState: { errors },
-    } = useForm<ReportOrderType>({
-        resolver: zodResolver(reportOrderSchema),
+    } = useForm<reportSchema.OrdersType>({
+        resolver: zodResolver(reportSchema.orders),
         defaultValues: DEFAULT_VALUE_REPORT_ORDER,
     });
     useEffect(() => {
@@ -35,7 +36,7 @@ const ReportOrderFilterPage = () => {
         }
     }, [errors]);
 
-    const onSubmit = (filter: ReportOrderType) => {
+    const onSubmit = handleSubmit((filter) => {
         try {
             const params = new URLSearchParams({
                 from_date: filter.fromDate.toISOString(),
@@ -51,7 +52,7 @@ const ReportOrderFilterPage = () => {
         } catch (error: any) {
             console.log(error.response.data);
         }
-    };
+    });
     return (
         <MainLayout>
             <div className="flex justify-between items-center">
@@ -63,13 +64,10 @@ const ReportOrderFilterPage = () => {
 
             <ReportForm
                 fields={REPORT_ORDER_FORM_FIELDS}
-                handleSubmit={handleSubmit}
+                onSubmit={onSubmit}
                 control={control}
                 errors={errors}
                 fieldRefs={fieldRefs}
-                onSubmit={onSubmit}
-                showAlert={showAlert}
-                setShowAlert={setShowAlert}
                 inputDate={
                     <div id="input-date" className="flex w-full justify-between items-center gap-10">
                         <InputDate
@@ -90,6 +88,12 @@ const ReportOrderFilterPage = () => {
                     </div>
                 }
             />
+
+            <AnimatePresence>
+                {showAlert && (
+                    <AlertInfo handleAlert={() => setShowAlert(false)} message="Rekap filter berhasil dicetak" />
+                )}
+            </AnimatePresence>
         </MainLayout>
     );
 };

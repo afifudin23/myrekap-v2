@@ -17,6 +17,12 @@ export const PRODUCT_FORM_ITEMS = [
         name: "description",
     },
     {
+        label: "Status Produk",
+        type: "boolean",
+        name: "isActive",
+        optionLabel: { true: "Aktif", false: "Tidak Aktif" },
+    },
+    {
         label: "Gambar Produk",
         type: "file",
         name: "images",

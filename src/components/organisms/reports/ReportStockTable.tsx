@@ -61,7 +61,7 @@ function ReportStockTable({ reportStock }: any) {
 
                 <table className="w-full text-xs text-gray-700 border-collapse border-[1px] border-slate-700">
                     <thead>
-                        {type === "summary" ? (
+                        {type === "GENERAL" ? (
                             <tr>
                                 <th className="border p-2 border-slate-500 bg-blue-300">No.</th>
                                 <th className="border p-2 border-slate-500 bg-blue-300">Kode Produk</th>
@@ -83,7 +83,7 @@ function ReportStockTable({ reportStock }: any) {
                         )}
                     </thead>
                     <tbody>
-                        {type === "summary"
+                        {type === "GENERAL"
                             ? reportStock.map((stock: any, index: number) => (
                                 <tr key={index}>
                                     <td className="border p-2 border-slate-700 text-center">{index + 1}</td>

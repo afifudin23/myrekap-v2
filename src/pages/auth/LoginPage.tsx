@@ -43,9 +43,7 @@ function LoginPage() {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<authSchema.LoginType>({
-        resolver: zodResolver(authSchema.login),
-    });
+    } = useForm<authSchema.LoginType>({ resolver: zodResolver(authSchema.login) });
 
     const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);

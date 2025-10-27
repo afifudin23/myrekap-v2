@@ -5,6 +5,7 @@ export const create = z
         name: z.string().min(1, { message: "Nama produk harus diisi" }),
         price: z.number().min(1, { message: "Harga produk harus diisi" }),
         description: z.string().min(1, { message: "Deskripsi produk harus diisi" }),
+        isActive: z.boolean({ required_error: "Harap pilih status produk terlebih dahulu." }),
         images: z.array(
             z
                 .instanceof(File)
@@ -39,7 +40,8 @@ export const update = z.object({
     name: z.string().min(1, { message: "Nama produk harus diisi" }),
     price: z.number().min(1, { message: "Harga produk harus diisi" }),
     description: z.string().min(1, { message: "Deskripsi produk harus diisi" }),
-    publicIdsToDelete: z.array(z.string()),
+    isActive: z.boolean({ required_error: "Harap pilih status produk terlebih dahulu." }),
+    publicIdsToDelete: z.array(z.string()).optional(),
     images: z.array(
         z.union([
             existingFile,
@@ -59,13 +61,13 @@ export const manageStock = z.object({
     name: z.string(),
     type: z
         .enum(["stock_in", "stock_out"], {
+            required_error: "Tipe perubahan stock harus diisi",
             invalid_type_error: "Tipe perubahan stock tidak valid",
-        })
-        .nullable(),
+        }),
     quantity: z.coerce
         .number({ invalid_type_error: "Jumlah produk tidak valid" })
         .min(1, { message: "Jumlah produk harus diisi" }),
-    note: z.string().min(1, { message: "Catatan harus diisi" }),
+    note: z.string().min(1, { message: "Note harus diisi" }),
 });
 
 export type ManageStockType = TypeOf<typeof manageStock>;

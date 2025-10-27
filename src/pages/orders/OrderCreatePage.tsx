@@ -53,16 +53,16 @@ function OrderCreatePage() {
             deliveryOption: undefined,
             deliveryAddress: "",
             shippingCost: 0,
+            isPaid: false,
             paymentMethod: undefined,
             paymentProof: null,
         },
     });
 
-    const onSubmit = async (data: orderSchema.CreateType) => {
+    const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);
         try {
             const formData = toFormData(data);
-
             await axiosInstance.post("orders/myrekap", formData);
 
             navigate("/orders", { state: { message: "Pesanan baru berhasil ditambahkan" } });
@@ -78,7 +78,7 @@ function OrderCreatePage() {
         } finally {
             setIsLoading(false);
         }
-    };
+    });
 
     return (
         <MainLayout>
@@ -89,7 +89,7 @@ function OrderCreatePage() {
                 </button>
             </div>
             <OrderForm
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={onSubmit}
                 fieldRefs={fieldRefs}
                 control={control}
                 watch={watch}

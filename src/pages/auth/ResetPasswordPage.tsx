@@ -3,7 +3,7 @@ import { AlertInfo } from "@/components/molecules";
 import { RESET_PASSWORD_FIELDS } from "@/components/organisms/auth";
 import AuthForm from "@/components/organisms/auth/AuthForm";
 import AuthTemplate from "@/components/templates/AuthTemplate";
-import { authSchema, userSchema } from "@/schemas";
+import { authSchema } from "@/schemas";
 import { axiosInstance } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
@@ -24,9 +24,7 @@ function ResetPasswordPage() {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<authSchema.ResetPasswordType>({
-        resolver: zodResolver(authSchema.resetPassword),
-    });
+    } = useForm<authSchema.ResetPasswordType>({ resolver: zodResolver(authSchema.resetPassword) });
 
     const onSubmit = handleSubmit(async (data) => {
         setIsLoading(true);

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { AiFillCloseCircle } from "react-icons/ai";
+import { RiCloseCircleFill } from "react-icons/ri";
 
 function InputFilter({
     options,
@@ -16,7 +16,7 @@ function InputFilter({
 }) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const defaultValue = useRef(value);
+    const defaultValue = useRef(name);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -37,7 +37,7 @@ function InputFilter({
                         setIsOpen(false);
                     }}
                 >
-                    <AiFillCloseCircle className="text-slate-200" />
+                    <RiCloseCircleFill className="text-white" />
                 </button>
             )}
             <div

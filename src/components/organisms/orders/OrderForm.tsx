@@ -35,9 +35,12 @@ function OrderForm({ onSubmit, fieldRefs, control, watch, errors, getValues, set
     const deliveryOption = watch("deliveryOption");
     const paymentMethod = watch("paymentMethod");
     const items = watch("items");
-    const totalPrice = items.reduce((total: number, item: any) => total + item.price * item.quantity, 0);
-    const shippingCost = deliveryOption === "DELIVERY" ? totalPrice * 0.1 : 0;
     const isPaid = watch("isPaid");
+    const totalPrice = items.reduce(
+        (total: number, item: { price: number; quantity: number }) => total + item.price * item.quantity,
+        0
+    );
+    const shippingCost = watch("shippingCost");
 
     useEffect(() => {
         if (!errors || Object.keys(errors).length === 0) return;
@@ -73,8 +76,6 @@ function OrderForm({ onSubmit, fieldRefs, control, watch, errors, getValues, set
                                 label={item.label}
                                 name={item.name}
                                 control={control}
-                                // ref={(el) => (fieldRefs.current[item.name] = el)}  TODO: fix this
-                                error={getErrorMessage(item.name, errors)}
                                 setValue={setValue}
                             />
                         );
@@ -144,8 +145,18 @@ function OrderForm({ onSubmit, fieldRefs, control, watch, errors, getValues, set
                         );
                 }
             })}
-            <h1>Biaya Pengiriman: {formatters.formatRupiah(shippingCost)}</h1>
-            <h1>Total Harga: {formatters.formatRupiah(totalPrice + shippingCost)}</h1>
+            <ul className="list-inside mt-5 2xl:mt-8 space-y-3 2xl:space-y-3 text-base 2xl:text-lg">
+                <li>
+                    Biaya Pengiriman <span className="float-right">{formatters.formatRupiah(shippingCost)}</span>
+                </li>
+                <li>
+                    Total Harga Produk <span className="float-right">{formatters.formatRupiah(totalPrice)}</span>
+                </li>
+                <li className="font-semibold">
+                    Total Pembayaran{" "}
+                    <span className="float-right">{formatters.formatRupiah(totalPrice + shippingCost)}</span>
+                </li>
+            </ul>
 
             <Button type="submit" className="mb-28 mt-20 2xl:mt-32 p-1 2xl:p-2 w-[15rem] 2xl:w-[20rem]" colors={COLORS}>
                 Submit

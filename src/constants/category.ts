@@ -51,11 +51,11 @@ export const ORDER_STATUS_LABELS: any = {
 };
 
 // Type Stock Report
-export const TYPE_STOCK_REPORT_ITEMS = ["summary", "stock_in", "stock_out"];
+export const TYPE_STOCK_REPORT_ITEMS = ["GENERAL", "STOCK_IN", "STOCK_OUT"];
 export const TYPE_STOCK_REPORT_LABELS: any = {
-    summary: "General",
-    stock_in: "Stok Masuk",
-    stock_out: "Stok Keluar",
+    GENERAL: "General",
+    STOCK_IN: "Stock Masuk",
+    STOCK_OUT: "Stock Keluar",
 };
 
 export const SOURCE_LABELS: any = {

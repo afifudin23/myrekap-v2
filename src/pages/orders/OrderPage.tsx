@@ -1,6 +1,5 @@
 import { ButtonSmall } from "@/components/atoms";
-import { AlertInfo, InputMonthYear, OrderPagination, TitlePage } from "@/components/molecules";
-import Search from "@/components/molecules/orders/OrderSearch";
+import { AlertInfo, InputMonthYear, OrderPagination, OrderSearch, TitlePage } from "@/components/molecules";
 import MainLayout from "@/components/templates/MainLayout";
 import { useOrders } from "@/hooks";
 import { axiosInstance, filterCustomerCategory, filterOrderStatus, filterPaymentStatus, filterSearch } from "@/utils";
@@ -60,7 +59,7 @@ function OrderPage() {
         <MainLayout>
             <TitlePage title="Daftar Penjualan" subtitle="Menampilkan Data Penjualan Yang Terdaftar" />
             <InputMonthYear monthYear={monthYear} setMonthYear={setMonthYear} />
-            <Search
+            <OrderSearch
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
                 filterCustomer={filterCustomer}

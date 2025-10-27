@@ -18,7 +18,7 @@ export function getSummaryPerDay(orders: any[]) {
         const index = day - 1;
 
         salesPerDay[index] += totalQuantity;
-        revenuePerDay[index] += order.totalPrice * order.quantity + order.shippingCost;
+        revenuePerDay[index] += order.totalPrice + order.shippingCost;
     });
 
     return { salesPerDay, revenuePerDay };

@@ -1,3 +1,4 @@
+import { Loading } from "@/components/atoms";
 import { TitlePage } from "@/components/molecules";
 import { PRODUCT_FORM_ITEMS, ProductForm } from "@/components/organisms/products";
 import MainLayout from "@/components/templates/MainLayout";
@@ -29,6 +30,7 @@ function ProductEditPage() {
             name: "",
             price: 0,
             description: "",
+            isActive: true,
             images: [],
             publicIdsToDelete: [],
         },
@@ -37,15 +39,12 @@ function ProductEditPage() {
     // Check if the product is already in the local storage
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem("productDetail") || "{}");
-        if (data.id === id) {
-            reset(data);
-        } else {
-            navigate("/products");
-        }
+        if (data.id === id) reset(data);
+        else navigate("/products");
     }, [id]);
 
-    const onSubmit = handleSubmit(async (data: productSchema.UpdateType) => {
-        console.log(data);
+    const onSubmit = handleSubmit(async (data) => {
+        console.log(data)
         setIsLoading(true);
         try {
             const formData = new FormData();
@@ -55,38 +54,26 @@ function ProductEditPage() {
 
                 // Handle multiple file upload
                 if (key === "images" && Array.isArray(value)) {
-                    value.forEach((item: any) => {
-                        if (item instanceof File) formData.append("images", item);
-                    });
+                    value.forEach((item: any) => item instanceof File && formData.append("images", item));
                 } else if (key === "publicIdsToDelete" && Array.isArray(value)) {
-                    value.forEach((publicId) => {
-                        if (typeof publicId === "string") formData.append(key, publicId.toString());
-                    });
-                } else {
+                    value.forEach(
+                        (publicId) => typeof publicId === "string" && formData.append(key, publicId.toString())
+                    );
+                } else if (value !== undefined && value !== null) {
                     formData.append(key, value.toString());
                 }
             }
 
             await axiosInstance.patch(`products/${id}`, formData);
-            navigate("/products", {
-                state: {
-                    message: "Perubahan pada produk telah berhasil disimpan",
-                },
-            });
+            navigate("/products", { state: { message: "Perubahan pada produk telah berhasil disimpan" } });
         } catch (error: any) {
             console.log(error.response.data);
             if (error.response.status === 500) {
                 navigate("/products", {
-                    state: {
-                        message: "Oops! Server mengalami kendala teknis. Tim kami akan segera menanganinya",
-                    },
+                    state: { message: "Oops! Server mengalami kendala teknis. Tim kami akan segera menanganinya" },
                 });
             } else {
-                navigate("/products", {
-                    state: {
-                        message: error.response.data.message,
-                    },
-                });
+                navigate("/products", { state: { message: error.response.data.message } });
             }
         } finally {
             setIsLoading(false);
@@ -97,11 +84,7 @@ function ProductEditPage() {
         <MainLayout>
             <div className="flex justify-between">
                 <TitlePage title="Edit Produk" subtitle="Mengelola Data Produk Penjualan" />
-                <button
-                    onClick={() => {
-                        navigate("/products");
-                    }}
-                >
+                <button onClick={() => navigate("/products")}>
                     <TbLogout2 className="text-5xl 2xl:text-6xl" />
                 </button>
             </div>
@@ -109,12 +92,12 @@ function ProductEditPage() {
                 control={control}
                 onSubmit={onSubmit}
                 errors={errors}
-                isLoading={isLoading}
                 fieldRefs={fieldRefs}
                 getValues={getValues}
                 setValue={setValue}
                 fields={PRODUCT_FORM_ITEMS}
             />
+            {isLoading && <Loading />}
         </MainLayout>
     );
 }

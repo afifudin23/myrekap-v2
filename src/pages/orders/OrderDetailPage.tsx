@@ -26,7 +26,7 @@ function OrderDetailPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
     const [showAlert, setShowAlert] = useState<boolean>(false);
-    const [isOpenUpdateProgress, setIsOpenUpdateProgress] = useState(false);
+    const [isOpenUpdateStatus, setIsOpenUpdateStatus] = useState(false);
     const [isOpenPaymentProof, setIsOpenPaymentProof] = useState(false);
     const printRef = useRef<HTMLDivElement>(null);
     const paymentProof = order.images?.find((img: ImageType) => img.type === "PAYMENT_PROOF");
@@ -70,7 +70,7 @@ function OrderDetailPage() {
 
             localStorage.setItem("orderDetail", JSON.stringify(updatedOrder));
             setOrder(updatedOrder);
-            
+
             setShowAlert(true);
             setMessage("Progres berhasil diperbarui");
         } catch (error: any) {
@@ -85,7 +85,7 @@ function OrderDetailPage() {
         } finally {
             setTimeout(() => setShowAlert(false), 3000);
             setIsLoading(false);
-            setIsOpenUpdateProgress(false);
+            setIsOpenUpdateStatus(false);
         }
     };
     const handleDeleteFinishedProduct = () => {
@@ -122,8 +122,8 @@ function OrderDetailPage() {
 
             <OrderDetailSection
                 order={order}
-                isOpenUpdateProgress={isOpenUpdateProgress}
-                setIsOpenUpdateProgress={setIsOpenUpdateProgress}
+                isOpenUpdateStatus={isOpenUpdateStatus}
+                setIsOpenUpdateStatus={setIsOpenUpdateStatus}
                 setIsOpenPaymentProof={setIsOpenPaymentProof}
                 printRef={printRef}
                 handlePrintPdf={handlePrintPdf}
@@ -150,14 +150,14 @@ function OrderDetailPage() {
             )}
 
             {/* Input Update Progress */}
-            {isOpenUpdateProgress && (
+            {isOpenUpdateStatus && (
                 <div
                     className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-                    onClick={() => setIsOpenUpdateProgress(false)}
+                    onClick={() => setIsOpenUpdateStatus(false)}
                 >
                     <form
                         onSubmit={handleSubmit(handleUpdateStatus)}
-                        className="bg-white p-6 rounded-lg shadow-lg w-2/4 h-4/5 space-y-10"
+                        className="bg-white p-6 rounded-lg shadow-lg w-2/4 h-4/5 grid grid-rows-[auto_1fr_auto] gap-3"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <InputDropdown
@@ -172,15 +172,17 @@ function OrderDetailPage() {
                             })}
                             optionLabel={ORDER_STATUS_LABELS}
                         />
-                        <InputFinishedProduct
-                            control={control}
-                            errors={errors}
-                            finishedProduct={finishedProduct}
-                            handleDelete={() => handleDeleteFinishedProduct()}
-                        />
+                        <div className="">
+                            <InputFinishedProduct
+                                control={control}
+                                errors={errors}
+                                finishedProduct={finishedProduct}
+                                handleDelete={() => handleDeleteFinishedProduct()}
+                            />
+                        </div>
                         <ButtonSmall
                             type="submit"
-                            className="w-1/6 mx-auto py-1 2xl:py-2 px-4 font-semibold bg-blue-600 hover:bg-blue-700"
+                            className="w-1/6 mx-auto py-1 2xl:py-2 px-4 font-semibold bg-blue-600 hover:bg-blue-700 self-start"
                         >
                             Simpan
                         </ButtonSmall>

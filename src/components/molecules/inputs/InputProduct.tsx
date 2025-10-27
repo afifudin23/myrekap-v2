@@ -3,27 +3,54 @@ import { axiosInstance, formatters } from "@/utils";
 import { useEffect, useState } from "react";
 import { Controller, useFieldArray } from "react-hook-form";
 
-function InputProduct({ label, name, control, setValue }: any) {
+type OrderItemField = {
+    productId: string;
+    quantity: number;
+    message?: string;
+    price: number;
+};
+type FormValues = {
+    items: OrderItemField[];
+};
+
+interface InputProductProps {
+    label: string;
+    name: string;
+    control: any;
+    setValue: any;
+}
+
+function InputProduct({ label, name, control, setValue }: InputProductProps) {
     const [categoryProducts, setCategoryProducts] = useState([]);
-    const { fields, append, remove } = useFieldArray({
+    const { fields, append, remove } = useFieldArray<FormValues, "items">({
         control,
-        name,
+        name: "items",
     });
 
     useEffect(() => {
         const getCategoryProducts = async () => {
             try {
                 const response = await axiosInstance.get("/products");
-                setCategoryProducts(response.data.data);
+                const allProducts = response.data.data;
+
+                // get all id from fields
+                const selectedIds = fields.map((f) => f.productId);
+
+                // filter: get active products OR already selected products
+                const products = allProducts.filter(
+                    (product: any) => product.isActive === true || selectedIds.includes(product.id)
+                );
+
+                setCategoryProducts(products);
             } catch (error) {
                 console.log(error);
             }
         };
         getCategoryProducts();
-    }, []);
+    }, [fields]); // tambah dependency supaya re-run kalau fields berubah
 
     return (
-        <div>
+        <div className="flex flex-col gap-3">
             <Label id={name} children={label} />
 
             <div className="space-y-6 w-full mx-auto p-4 border rounded-xl shadow">
@@ -59,11 +86,20 @@ function InputProduct({ label, name, control, setValue }: any) {
                                             required
                                         >
                                             <option value="">-- Pilih Kategori --</option>
-                                            {categoryProducts.map((product: any) => (
-                                                <option key={product.id} value={product.id}>
-                                                    {product.name} - {formatters.formatRupiah(product.price)}
-                                                </option>
-                                            ))}
+                                            {categoryProducts
+
+                                                // filter produk yang sudah dipilih di field lain
+                                                .filter(
+                                                    (product: any) =>
+                                                        !fields.some(
+                                                            (f, i) => i !== index && f.productId === product.id // exclude current row
+                                                        )
+                                                )
+                                                .map((product: any) => (
+                                                    <option key={product.id} value={product.id}>
+                                                        {product.name} - {formatters.formatRupiah(product.price)}
+                                                    </option>
+                                                ))}
                                         </select>
                                     </div>
                                 )}

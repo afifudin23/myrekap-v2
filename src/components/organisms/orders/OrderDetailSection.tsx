@@ -20,8 +20,8 @@ import { MdOutlineDownloadForOffline } from "react-icons/md";
 function OrderDetailSection({
     order,
     paymentProof,
-    isOpenUpdateProgress,
-    setIsOpenUpdateProgress,
+    isOpenUpdateStatus,
+    setIsOpenUpdateStatus,
     setIsOpenPaymentProof,
     handlePrintPdf,
 }: any) {
@@ -33,7 +33,7 @@ function OrderDetailSection({
             <div className="space-y-5">
                 <div className="flex justify-between items-start">
                     <Badge className="text-base font-semibold 2xl:text-xl px-3 py-1 bg-slate-800 bg-opacity-40 text-white">
-                        {"#" + order.orderCode}
+                        {order.orderCode}
                     </Badge>
                     <div className="flex gap-2 text-sm">
                         <Badge
@@ -127,7 +127,9 @@ function OrderDetailSection({
                                         <TbReceiptFilled />
                                         Bukti Pembayaran
                                     </button>
-                                ): "-"}
+                                ) : (
+                                    "-"
+                                )}
                             </p>
                         </p>
                     </div>
@@ -166,7 +168,7 @@ function OrderDetailSection({
                 </ButtonSmall>
                 <ButtonSmall
                     className="bg-blue-600 hover:bg-blue-700 py-1 2xl:py-2 px-4 font-semibold"
-                    onClick={() => setIsOpenUpdateProgress(!isOpenUpdateProgress)}
+                    onClick={() => setIsOpenUpdateStatus(!isOpenUpdateStatus)}
                 >
                     <GrUpdate />
                     Progress
