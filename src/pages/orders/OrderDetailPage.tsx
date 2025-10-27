@@ -149,7 +149,7 @@ function OrderDetailPage() {
                 </div>
             )}
 
-            {/* Input Update Progress */}
+            {/* Input Update Status */}
             {isOpenUpdateStatus && (
                 <div
                     className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
@@ -157,7 +157,7 @@ function OrderDetailPage() {
                 >
                     <form
                         onSubmit={handleSubmit(handleUpdateStatus)}
-                        className="bg-white p-6 rounded-lg shadow-lg w-2/4 h-4/5 grid grid-rows-[auto_1fr_auto] gap-3"
+                        className="bg-white p-6 rounded-lg shadow-lg w-2/4 grid grid-rows-[auto_auto_auto] gap-3"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <InputDropdown
@@ -168,18 +168,17 @@ function OrderDetailPage() {
                             options={ORDER_STATUS_ITEMS.filter((item) => {
                                 const excludedLabels = ["ALL"];
                                 if (order.deliveryOption === "SELF_PICKUP") excludedLabels.push("DELIVERY");
+                                if (order.source === "MYFLOWER") excludedLabels.push("CANCELED", "COMPLETED");
                                 return !excludedLabels.includes(item);
                             })}
                             optionLabel={ORDER_STATUS_LABELS}
                         />
-                        <div className="">
-                            <InputFinishedProduct
-                                control={control}
-                                errors={errors}
-                                finishedProduct={finishedProduct}
-                                handleDelete={() => handleDeleteFinishedProduct()}
-                            />
-                        </div>
+                        <InputFinishedProduct
+                            control={control}
+                            errors={errors}
+                            finishedProduct={finishedProduct}
+                            handleDelete={() => handleDeleteFinishedProduct()}
+                        />
                         <ButtonSmall
                             type="submit"
                             className="w-1/6 mx-auto py-1 2xl:py-2 px-4 font-semibold bg-blue-600 hover:bg-blue-700 self-start"
