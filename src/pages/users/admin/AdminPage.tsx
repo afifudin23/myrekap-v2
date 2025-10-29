@@ -7,7 +7,7 @@ import { axiosInstance } from "@/utils";
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { MdAddToPhotos } from "react-icons/md";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const AdminPage = () => {
     const { users, setUsers } = useUsers("admins");
@@ -15,6 +15,7 @@ const AdminPage = () => {
 
     // Alert
     const location = useLocation();
+    const navigate = useNavigate();
     const [message, setMessage] = useState<string | null>(null);
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [showAlertConfirm, setShowAlertConfirm] = useState<boolean>(false);
@@ -24,15 +25,8 @@ const AdminPage = () => {
         if (state?.message) {
             setMessage(state.message);
             setShowAlert(true);
-
-            const timer = setTimeout(() => {
-                setShowAlert(false);
-                window.history.replaceState({}, document.title);
-            }, 3000);
-
-            return () => clearTimeout(timer);
         }
-    }, [location.key]);
+    }, []);
 
     const handleDeleteUser = (id: string, name: string) => {
         setSelectedUserId(id);
@@ -73,7 +67,15 @@ const AdminPage = () => {
 
             {/* Alert */}
             <AnimatePresence>
-                {showAlert && message && <AlertInfo message={message} handleAlert={() => setShowAlert(false)} />}
+                {showAlert && message && (
+                    <AlertInfo
+                        message={message}
+                        handleAlert={() => {
+                            setShowAlert(false);
+                            navigate("/users/admin", { state: {} });
+                        }}
+                    />
+                )}
                 {showAlertConfirm && message && (
                     <AlertConfirm
                         message={message}

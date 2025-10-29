@@ -1,17 +1,32 @@
 import MainLayout from "@/components/templates/MainLayout";
 import "react-datepicker/dist/react-datepicker.css";
-import { InputMonthYear } from "@/components/molecules";
+import { AlertInfo, InputMonthYear } from "@/components/molecules";
 import { DashboardChart } from "@/components/organisms/dashboard";
 import { useOrders } from "@/hooks";
 import { useEffect, useState } from "react";
 import { OrderList } from "@/components/organisms/orders";
 import { axiosInstance } from "@/utils";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 
 function DashboardPage() {
     const [monthYear, setMonthYear] = useState<Date>(new Date());
     const { orders, setOrders } = useOrders();
     const [_, setSearchParams] = useSearchParams();
+
+    // Alert
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [message, setMessage] = useState<string>("");
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+
+    useEffect(() => {
+        const state = location.state as { message?: string };
+        if (state?.message) {
+            setMessage(state.message);
+            setShowAlert(true);
+        }
+    }, []);
 
     // Get 6 Orders, Refac Next Project
     const ordersSix = orders.slice(0, 6);
@@ -40,6 +55,19 @@ function DashboardPage() {
             ) : (
                 <h1 className="text-center text-2xl my-16">Data Pesanan Tidak Ditemukan</h1>
             )}
+
+            {/* Custom Alert */}
+            <AnimatePresence>
+                {showAlert && (
+                    <AlertInfo
+                        handleAlert={() => {
+                            setShowAlert(false);
+                            navigate("/dashboard", { state: {} });
+                        }}
+                        message={message}
+                    />
+                )}
+            </AnimatePresence>
         </MainLayout>
     );
 }

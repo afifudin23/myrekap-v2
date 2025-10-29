@@ -20,7 +20,6 @@ function ProductPage() {
         if (state?.message) {
             setMessage(state.message);
             setShowAlert(true);
-            navigate("/products", { state: {} });
         }
     }, []);
 
@@ -42,7 +41,15 @@ function ProductPage() {
 
             {/* Alert */}
             <AnimatePresence>
-                {showAlert && message && <AlertInfo message={message} handleAlert={() => setShowAlert(false)} />}
+                {showAlert && message && (
+                    <AlertInfo
+                        message={message}
+                        handleAlert={() => {
+                            setShowAlert(false);
+                            navigate("/products", { state: {} });
+                        }}
+                    />
+                )}
             </AnimatePresence>
         </MainLayout>
     );

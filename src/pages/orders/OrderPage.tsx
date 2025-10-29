@@ -23,7 +23,6 @@ function OrderPage() {
         if (state?.message) {
             setMessage(state.message);
             setShowAlert(true);
-            navigate("/orders", { state: {} });
         }
     }, []);
 
@@ -84,7 +83,15 @@ function OrderPage() {
 
             {/* Alert */}
             <AnimatePresence>
-                {showAlert && message && <AlertInfo message={message} handleAlert={() => setShowAlert(false)} />}
+                {showAlert && message && (
+                    <AlertInfo
+                        message={message}
+                        handleAlert={() => {
+                            setShowAlert(false);
+                            navigate("/orders", { state: {} });
+                        }}
+                    />
+                )}
             </AnimatePresence>
         </MainLayout>
     );

@@ -4,7 +4,7 @@ export function SidebarMenuItem({ name, path, icons }: any) {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     return (
         <>
-            {path === "users/admin" && user.role === "ADMIN" ? (
+            {path === "users/admin" && user.role !== "SUPERADMIN" ? (
                 <p className="flex gap-3 w-fit items-center text-gray-400">
                     {icons.inactive}
                     <button className={`cursor-not-allowed`}>{name}</button>
