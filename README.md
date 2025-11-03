@@ -13,8 +13,8 @@
   <img src="https://img.shields.io/badge/React%20Router%20DOM-v7.1.1-CA4245?logo=reactrouter&logoColor=white" />
   <img src="https://img.shields.io/badge/Zustand-v5.0.6-764ABC?logo=react&logoColor=white" />
   <img src="https://img.shields.io/badge/Zod-v3.24.1-2D3748?logo=zod&logoColor=white" />
-  <img src="https://img.shields.io/badge/Cloudinary-Image%20Storage-030434" />
-  <img src="https://img.shields.io/badge/Brevo-Email%20Service-0D99FF" />
+  <img src="https://img.shields.io/badge/Cloudinary-Image%20Storage-030434?logo=cloudinary&logoColor=white" />
+  <img src="https://img.shields.io/badge/Brevo-Email%20Service-98ff98?logo=brevo&logoColor=white" />
   <img src="https://img.shields.io/badge/License-MIT-yellow" />
 </p>
 

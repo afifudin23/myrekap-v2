@@ -1,4 +1,4 @@
-# Support for MyRekap
+# Support for MyRekap v2
 
 Thank you for using **MyRekap**! If you encounter any issues, need assistance, or have questions, this guide will help you get support efficiently.
 
