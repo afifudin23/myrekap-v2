@@ -9,10 +9,10 @@
   <img src="https://img.shields.io/badge/Node.js-v22.18.0-tosca?logo=node.js&logoColor=white" />
   <img src="https://img.shields.io/badge/Express.js-4.21.2-000000?logo=express&logoColor=white" />
   <img src="https://img.shields.io/badge/TypeScript-v5.6.3-0D99FF?logo=typescript&logoColor=white" />
-  <img src="https://img.shields.io/badge/TailwindCSS-v3.3-38BDF8?logo=tailwindcss&logoColor=white" />
-  <img src="https://img.shields.io/badge/React%20Router%20DOM-v7.1-CA4245?logo=reactrouter&logoColor=white" />
-  <img src="https://img.shields.io/badge/Zustand-v5.0-764ABC?logo=react&logoColor=white" />
-  <img src="https://img.shields.io/badge/Zod-v3.24-2D3748?logo=zod&logoColor=white" />
+  <img src="https://img.shields.io/badge/TailwindCSS-v3.3.2-38BDF8?logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/React%20Router%20DOM-v7.1.1-CA4245?logo=reactrouter&logoColor=white" />
+  <img src="https://img.shields.io/badge/Zustand-v5.0.6-764ABC?logo=react&logoColor=white" />
+  <img src="https://img.shields.io/badge/Zod-v3.24.1-2D3748?logo=zod&logoColor=white" />
   <img src="https://img.shields.io/badge/Cloudinary-Image%20Storage-030434" />
   <img src="https://img.shields.io/badge/Brevo-Email%20Service-0D99FF" />
   <img src="https://img.shields.io/badge/License-MIT-yellow" />
