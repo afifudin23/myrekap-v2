@@ -44,7 +44,7 @@ function OrderDetailPage() {
             isDeleteImage: false,
         },
     });
-
+    
     useEffect(() => {
         const storedOrder = localStorage.getItem("orderDetail");
         if (storedOrder) {

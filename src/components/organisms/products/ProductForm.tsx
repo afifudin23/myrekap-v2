@@ -1,13 +1,15 @@
 import { InputBoolean, InputDropdown, InputFile, InputMoney, InputText } from "@/components/molecules";
-import { Button, Loading } from "@/components/atoms";
+import { Button } from "@/components/atoms";
 import { COLORS } from "@/constants/colors";
 
 const getErrorMessage = (fieldName: string, errors: any) => {
     const error = errors[fieldName as keyof typeof errors];
-    return typeof error?.message === "string" ? error.message : undefined;
+    if (!error) return undefined;
+    if (Array.isArray(error)) return error ?? undefined;
+    if (typeof error === "object" && error.message) return error.message;
 };
 
-function ProductForm({ control, onSubmit, errors, fieldRefs, isLoading, setValue, getValues, fields }: any) {
+function ProductForm({ control, onSubmit, errors, fieldRefs, setValue, getValues, fields }: any) {
     return (
         <form className="flex flex-col justify-between gap-5 2xl:gap-6" onSubmit={onSubmit}>
             {fields.map((item: any) => {
@@ -19,7 +21,7 @@ function ProductForm({ control, onSubmit, errors, fieldRefs, isLoading, setValue
                                 label={item.label}
                                 name={item.name}
                                 ref={(el) => (fieldRefs.current[item.name] = el)}
-                                error={errors[item.name as any]?.message}
+                                error={getErrorMessage(item.name, errors)}
                                 control={control}
                                 disabled={item.disabled}
                             />
@@ -31,7 +33,7 @@ function ProductForm({ control, onSubmit, errors, fieldRefs, isLoading, setValue
                                 label={item.label}
                                 name={item.name}
                                 ref={(el) => (fieldRefs.current[item.name] = el)}
-                                error={errors[item.name as any]?.message}
+                                error={getErrorMessage(item.name, errors)}
                                 control={control}
                             />
                         );
@@ -56,7 +58,7 @@ function ProductForm({ control, onSubmit, errors, fieldRefs, isLoading, setValue
                                 label={item.label}
                                 name={item.name}
                                 ref={(el) => (fieldRefs.current[item.name] = el)}
-                                error={errors[item.name as any]?.message}
+                                error={getErrorMessage(item.name, errors)}
                                 control={control}
                                 options={item.options}
                                 optionLabel={item.optionLabel}

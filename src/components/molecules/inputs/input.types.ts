@@ -29,7 +29,7 @@ export type InputDateProps = {
 export type InputFileProps = {
     label: string;
     name: string;
-    error?: string;
+    error?: any;
     control: Control<any>;
     disabled?: boolean;
     multiple?: boolean;

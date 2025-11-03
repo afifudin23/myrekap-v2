@@ -7,12 +7,9 @@ export const create = z
         description: z.string().min(1, { message: "Deskripsi produk harus diisi" }),
         isActive: z.boolean({ required_error: "Harap pilih status produk terlebih dahulu." }),
         images: z.array(
-            z
-                .instanceof(File)
-                .nullish()
-                .refine((file) => (file?.size ? file.size <= 2 * 1024 * 1024 : true), {
-                    message: "Ukuran maksimal file adalah 2 MB.",
-                })
+            z.instanceof(File).refine((file) => (file?.size ? file.size <= 2 * 1024 * 1024 : true), {
+                message: "Ukuran maksimal file adalah 2 MB.",
+            })
         ),
     })
     .superRefine((data, ctx) => {
@@ -42,28 +39,26 @@ export const update = z.object({
     description: z.string().min(1, { message: "Deskripsi produk harus diisi" }),
     isActive: z.boolean({ required_error: "Harap pilih status produk terlebih dahulu." }),
     publicIdsToDelete: z.array(z.string()).optional(),
-    images: z.array(
-        z.union([
-            existingFile,
-            z
-                .instanceof(File)
-                .nullish()
-                .refine((file) => (file?.size ? file.size <= 2 * 1024 * 1024 : true), {
+    images: z
+        .array(
+            z.union([
+                existingFile,
+                z.instanceof(File).refine((file) => (file?.size ? file.size <= 2 * 1024 * 1024 : true), {
                     message: "Ukuran maksimal file adalah 2 MB.",
                 }),
-        ])
-    ),
+            ])
+        )
+        .min(1, { message: "Harap unggah gambar produk terlebih dahulu." }),
 });
 
 export type UpdateType = TypeOf<typeof update>;
 
 export const manageStock = z.object({
     name: z.string(),
-    type: z
-        .enum(["stock_in", "stock_out"], {
-            required_error: "Tipe perubahan stock harus diisi",
-            invalid_type_error: "Tipe perubahan stock tidak valid",
-        }),
+    type: z.enum(["STOCK_IN", "STOCK_OUT"], {
+        required_error: "Tipe perubahan stock harus diisi",
+        invalid_type_error: "Tipe perubahan stock tidak valid",
+    }),
     quantity: z.coerce
         .number({ invalid_type_error: "Jumlah produk tidak valid" })
         .min(1, { message: "Jumlah produk harus diisi" }),

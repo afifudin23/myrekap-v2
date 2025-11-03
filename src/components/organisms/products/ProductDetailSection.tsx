@@ -4,17 +4,6 @@ import { FaTrashCan } from "react-icons/fa6";
 import { RiEdit2Fill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 
-// interface ProductDetailSectionProps {
-//     product: {
-//         id: string;
-//         name: string;
-//         image: string;
-//         price: number;
-//         stock: number;
-//         description?: string;
-//     };
-// }
-
 const ProductDetailSection = ({ product, handleDeleteConfirm }: any) => {
     const navigate = useNavigate();
 

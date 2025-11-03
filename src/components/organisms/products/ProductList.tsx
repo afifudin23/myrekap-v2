@@ -1,18 +1,6 @@
 import { ProductCard } from "@/components/molecules";
 import { Link } from "react-router-dom";
 
-// interface Product {
-//     id: string;
-//     image: string;
-//     stock: number;
-//     name: string;
-//     price: number;
-// }
-
-// interface ProductListProps {
-//     products: Product[];
-// }
-
 function ProductList({ products }: any) {
     const handleClick = (product: any) => {
         localStorage.setItem("productDetail", JSON.stringify(product));

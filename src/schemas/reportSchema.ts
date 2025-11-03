@@ -1,31 +1,36 @@
 import { TypeOf, z } from "zod";
 
-export const orders = z.object({
-    fromDate: z.date({
-        required_error: "Tanggal mulai wajib diisi",
-        invalid_type_error: "Format tanggal tidak valid",
-    }),
-    toDate: z.date({
-        required_error: "Tanggal selesai wajib diisi",
-        invalid_type_error: "Format tanggal tidak valid",
-    }),
-    customerCategory: z.enum(["ALL", "UMUM", "PEMDA", "PERBANKAN"], {
-        required_error: "Wajib pilih kategori customer",
-        invalid_type_error: "Kategori customer tidak valid",
-    }),
-    paymentMethod: z.enum(["ALL", "CASH", "BANK_TRANSFER"], {
-        required_error: "Wajib pilih metode pembayaran",
-        invalid_type_error: "Metode pembayaran tidak valid",
-    }),
-    paymentStatus: z.enum(["ALL", "PENDING", "UNPAID", "PAID", "EXPIRED", "REFUNDED", "DENIED"], {
-        required_error: "Wajib pilih status pembayaran",
-        invalid_type_error: "Status pembayaran tidak valid",
-    }),
-    orderStatus: z.enum(["ALL", "IN_PROCESS", "DELIVERY", "CANCELED", "COMPLETED"], {
-        required_error: "Wajib pilih status pesanan",
-        invalid_type_error: "Status pesanan tidak valid",
-    }),
-});
+export const orders = z
+    .object({
+        fromDate: z.date({
+            required_error: "Tanggal mulai wajib diisi",
+            invalid_type_error: "Format tanggal tidak valid",
+        }),
+        toDate: z.date({
+            required_error: "Tanggal selesai wajib diisi",
+            invalid_type_error: "Format tanggal tidak valid",
+        }),
+        customerCategory: z.enum(["ALL", "UMUM", "PEMDA", "PERBANKAN"], {
+            required_error: "Wajib pilih kategori customer",
+            invalid_type_error: "Kategori customer tidak valid",
+        }),
+        paymentMethod: z.enum(["ALL", "CASH", "BANK_TRANSFER"], {
+            required_error: "Wajib pilih metode pembayaran",
+            invalid_type_error: "Metode pembayaran tidak valid",
+        }),
+        paymentStatus: z.enum(["ALL", "PENDING", "UNPAID", "PAID", "EXPIRED", "REFUNDED", "DENIED"], {
+            required_error: "Wajib pilih status pembayaran",
+            invalid_type_error: "Status pembayaran tidak valid",
+        }),
+        orderStatus: z.enum(["ALL", "IN_PROCESS", "DELIVERY", "CANCELED", "COMPLETED"], {
+            required_error: "Wajib pilih status pesanan",
+            invalid_type_error: "Status pesanan tidak valid",
+        }),
+    })
+    .refine((data) => data.toDate > data.fromDate, {
+        message: "Tanggal selesai tidak boleh sama dengan atau lebih kecil dari tanggal mulai",
+        path: ["toDate"],
+    });
 
 export type OrdersType = TypeOf<typeof orders>;
 

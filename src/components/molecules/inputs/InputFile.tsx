@@ -94,9 +94,7 @@ const InputFile = React.forwardRef<HTMLDivElement, InputFileProps>(
                                             {value.map((file: ImageItem, i: number) => {
                                                 const isFile = file instanceof File;
                                                 const fileName = isFile ? file.name : file.fileName;
-                                                const imageUrl = isFile
-                                                    ? URL.createObjectURL(file)
-                                                    : file.secureUrl;
+                                                const imageUrl = isFile ? URL.createObjectURL(file) : file.secureUrl;
                                                 const fileSize = (file.size / 1024).toFixed(2);
 
                                                 return (
@@ -127,6 +125,12 @@ const InputFile = React.forwardRef<HTMLDivElement, InputFileProps>(
                                                         >
                                                             Hapus
                                                         </button>
+
+                                                        {Array.isArray(error) && (
+                                                            <p className="text-red-500 text-xs 2xl:text-sm mt-3">
+                                                                {error[i]?.message ? "*" + error[i]?.message : ""}
+                                                            </p>
+                                                        )}
                                                     </li>
                                                 );
                                             })}
@@ -137,7 +141,7 @@ const InputFile = React.forwardRef<HTMLDivElement, InputFileProps>(
                         );
                     }}
                 />
-                {error && <p className="text-red-500 text-xs 2xl:text-sm">*{error}</p>}
+                {error && !Array.isArray(error) && <p className="text-red-500 text-xs 2xl:text-sm">*{error}</p>}
             </div>
         );
     }

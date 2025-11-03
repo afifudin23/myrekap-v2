@@ -35,10 +35,11 @@ function InputProduct({ label, name, control, setValue }: InputProductProps) {
 
                 // get all id from fields
                 const selectedIds = fields.map((f) => f.productId);
+                console.log(allProducts);
 
                 // filter: get active products OR already selected products
                 const products = allProducts.filter(
-                    (product: any) => product.isActive === true || selectedIds.includes(product.id)
+                    (product: any) => (product.isActive === true || selectedIds.includes(product.id)) && product.stock > 0
                 );
 
                 setCategoryProducts(products);

@@ -13,22 +13,11 @@ import { Button } from "@/components/atoms";
 import { COLORS } from "@/constants/colors";
 import { formatters } from "@/utils";
 
-// interface OrderFormProps<TSchema extends ZodType<any, any>> {
-//     onSubmit: SubmitHandler<TypeOf<TSchema>>; // ini lebih tepat daripada React.FormEventHandler
-//     fieldRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
-//     control: Control<TypeOf<TSchema>>;
-//     watch: UseFormWatch<TypeOf<TSchema>>;
-//     clearErrors: UseFormClearErrors<TypeOf<TSchema>>;
-//     showAlert: boolean;
-//     setShowAlert: React.Dispatch<React.SetStateAction<boolean>>;
-//     alertMessage: string;
-//     isLoading: boolean;
-//     errors: FieldErrors<TypeOf<TSchema>>;
-// }
-
 const getErrorMessage = (fieldName: string, errors: any) => {
     const error = errors[fieldName as keyof typeof errors];
-    return typeof error?.message === "string" ? error.message : undefined;
+    if (!error) return undefined;
+    if (Array.isArray(error)) return error ?? undefined;
+    if (typeof error === "object" && error.message) return error.message;
 };
 
 function OrderForm({ onSubmit, fieldRefs, control, watch, errors, getValues, setValue }: any) {

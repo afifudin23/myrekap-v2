@@ -118,19 +118,19 @@ function OrderDetailSection({
                         </p>
                         <p className="flex flex-wrap items-center gap-1">
                             Provider :{" "}
-                            <p className="font-medium whitespace-nowrap">
-                                {order.paymentMethod === "BANK_TRANSFER" && paymentProof ? (
-                                    <button
-                                        className="flex w-full text-blue-600 items-center gap-1 font-medium"
-                                        onClick={() => setIsOpenPaymentProof(true)}
-                                    >
-                                        <TbReceiptFilled />
-                                        Bukti Pembayaran
-                                    </button>
-                                ) : (
-                                    "-"
-                                )}
-                            </p>
+                            {order.paymentMethod === "BANK_TRANSFER" && paymentProof ? (
+                                <button
+                                    className="flex w-full text-blue-600 items-center gap-1 font-medium"
+                                    onClick={() => setIsOpenPaymentProof(true)}
+                                >
+                                    <TbReceiptFilled />
+                                    Bukti Pembayaran
+                                </button>
+                            ) : order.paymentProvider ? (
+                                <span className="font-medium">{order.paymentProvider}</span>
+                            ) : (
+                                "-"
+                            )}
                         </p>
                     </div>
                     <div>

@@ -40,7 +40,7 @@ export const PRODUCT_STOCK_FORM_FIELDS = [
         label: "Tipe Perubahan Stok",
         type: "dropdown",
         name: "type",
-        options: TYPE_STOCK_REPORT_ITEMS.filter((item) => item !== "summary"),
+        options: TYPE_STOCK_REPORT_ITEMS.filter((item) => item !== "GENERAL"),
         optionLabel: TYPE_STOCK_REPORT_LABELS,
     },
     {

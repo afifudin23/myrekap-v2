@@ -61,7 +61,7 @@ function LoginPage() {
             }
 
             setIsLoading(false);
-            navigate("/dashboard", { state: { message: "Selamat datang kembali, " + resData.fullName + " !" } });
+            navigate("/dashboard", { state: { message: "Selamat datang kembali, " + resData.fullName + "!" } });
             useAuthStore.getState().setUser(resData);
         } catch (error: any) {
             const axiosError = error as AxiosError;
