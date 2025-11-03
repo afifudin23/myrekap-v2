@@ -9,10 +9,15 @@
   <img src="https://img.shields.io/badge/Node.js-v22.18.0-tosca?logo=node.js&logoColor=white" />
   <img src="https://img.shields.io/badge/Express.js-4.21.2-000000?logo=express&logoColor=white" />
   <img src="https://img.shields.io/badge/TypeScript-v5.6.3-0D99FF?logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/TailwindCSS-v3.3-38BDF8?logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/React%20Router%20DOM-v7.1-CA4245?logo=reactrouter&logoColor=white" />
+  <img src="https://img.shields.io/badge/Zustand-v5.0-764ABC?logo=react&logoColor=white" />
+  <img src="https://img.shields.io/badge/Zod-v3.24-2D3748?logo=zod&logoColor=white" />
   <img src="https://img.shields.io/badge/Cloudinary-Image%20Storage-030434" />
   <img src="https://img.shields.io/badge/Brevo-Email%20Service-0D99FF" />
   <img src="https://img.shields.io/badge/License-MIT-yellow" />
 </p>
+
 
 **MyRekap** is an application designed to help record data, monitor progress, and display reports in real time.
 Built with Node.js and a modern frontend, it allows users to manage information efficiently.
@@ -45,17 +50,14 @@ The MyRekap service serves as the reporting and administrative dashboard, enabli
 
 ## Tech Stack Required
 
--   **Backend:**
-    -   Node.js (v22.18)
-    -   Express.js (v4.21)
-    -   TypeScript (v5.6)
--   **Frontend:**
+-   **Tools:**
     -   React.js (v18.3)
     -   Vite (v6.0)
     -   TypeScript (v5.6)
--   **Database:**
-    -   MariaDB (v10.11)
-    -   Prisma ORM (v6.3)
+    -   Tailwind CSS (v3.3)
+    -   React Router DOM (v7.1)
+    -   Zustand (v5.0)
+    -   Zod (v3.24)
 -   **Package Manager:**
     -   npm (v10.9)
 -   **Third-Party Service:**
@@ -136,8 +138,8 @@ http://localhost:<PORT>                   # Default PORT: 5001
 
 Explore the main frontend features and usage of MyRekap through the following live demos:
 
-- Setup Guide: [View Demo](https://jam.dev/c/fab4b543-1a83-4838-8d6a-0551aee3ec31)    
-Step-by-step setup instructions showing how to install and configure MyRekap properly.
+-   Setup Guide: [View Demo](https://jam.dev/c/fab4b543-1a83-4838-8d6a-0551aee3ec31)  
+    Step-by-step setup instructions showing how to install and configure MyRekap properly.
 
-- Usage Overview: [View Demo](https://jam.dev/c/f1f7298e-91eb-4e8e-ab17-478f01a4a10e)     
-Demonstration of how to use MyRekap features including product, order, admin, and report management.
+-   Usage Overview: [View Demo](https://jam.dev/c/f1f7298e-91eb-4e8e-ab17-478f01a4a10e)  
+    Demonstration of how to use MyRekap features including product, order, admin, and report management.
